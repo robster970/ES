@@ -1,11 +1,12 @@
 import sierra_importer as si
-import logger
+import sierra_calculator as sc
+import sierra_logger as sl
 import pandas as pd
+from scipy.stats import norm
 import matplotlib.pyplot as plt
 
-
 # Set up logger
-processor_logger = logger.Logging()
+processor_logger = sl.Logging()
 module = "sierra_processor"
 log_message = "Processing started"
 processor_logger.parser(module, log_message)
@@ -31,12 +32,12 @@ combined = combined.dropna()
 log_message = "Combined ES & VIX clean data set ready for use."
 processor_logger.parser(module, log_message)
 
-print(combined.tail())
-print(combined.describe())
+# Pass cleaned data frame to calculator for specific calculations from specific methods.
+es_calc = sc.Calculator(combined, "VIX")
+combined = es_calc.calculate_values_VIX(10)
+log_message = "Additional columns with calculations returned from calculator"
+processor_logger.parser(module, log_message)
 
-combined['ES_Last'].tail(100).plot(color='red')
+combined['VIX_Ndt'].tail(100).plot(color='red')
 plt.show()
-combined['VIX_Last'].tail(100).plot(color='green')
-plt.show()
-combined['ES_Vol'].hist(bins=50, color='purple')
-plt.show()
+

@@ -1,5 +1,5 @@
 import pandas as pd
-import logger
+import sierra_logger as sl
 
 
 class Importer:
@@ -14,7 +14,7 @@ class Importer:
 
         # Create new logging instance
         # Log where file is ingested from
-        importer_logger = logger.Logging()
+        importer_logger = sl.Logging()
         log_message = "File location for import: " + self.full_path
         importer_logger.parser(self.module, log_message)
 
@@ -41,7 +41,7 @@ class Importer:
     def get_data(self):
         # Method to retrieve imported data
         redacted_data = self.data_frame.iloc[:, 1:7]
+        importer_logger = sl.Logging()
         log_message = "Redacted data frame created and data returned to requestor for " + self.column_id
-        importer_logger = logger.Logging()
         importer_logger.parser(self.module, log_message)
         return redacted_data
