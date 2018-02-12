@@ -4,11 +4,12 @@ import pandas as pd
 
 class Trading:
     """Class to make trading entry and exit decisions based upon a processed data frame being passed into the class
-    for assesmment"""
+    for assessment"""
 
     def __init__(self, data_frame):
         self.data_frame = data_frame
         self.module = "sierra_trade"
+        self.evaluation_frame = []
 
         # Create new logging instance
         # Log where file is ingested from
@@ -20,14 +21,15 @@ class Trading:
 
         # Build the evaluation frame and select the values of interest
         evaluation_frame = self.data_frame.tail(2)
-        print("-------------------------------------------------------------------------")
-        print(evaluation_frame.tail(3))
-        print("-------------------------------------------------------------------------")
+        self.evaluation_frame = evaluation_frame
+
         pdf_1 = pd.to_numeric(evaluation_frame.iloc[0:1, 13])
         pdf_2 = pd.to_numeric(evaluation_frame.iloc[1:, 13])
         ndst_1 = pd.to_numeric(evaluation_frame.iloc[0:1, 12])
         ndst_2 = pd.to_numeric(evaluation_frame.iloc[1:, 12])
 
+        # In the evaluation process below, the use of the .all() is a quirk of having to evaluate
+        # a pandas dataframe which required strict boolean interpretation of comparisons.
         if status == "entry":
             response = "Entry evaluation"
             if ((ndst_2 > 0.841) & (pdf_2 > 0) & (pdf_2 < 0.03)).all():
@@ -51,3 +53,6 @@ class Trading:
         importer_logger.parser(self.module, log_message)
 
         return signal
+
+    def get_evaluated_data(self):
+        return self.evaluation_frame

@@ -37,10 +37,16 @@ combined = combined.dropna()
 log_message = "Combined ES & VIX clean data set ready for use."
 processor_logger.parser(module, log_message)
 
-# Pass cleaned data frame to calculator for specific calculations from specific methods.
-es_calc = sc.Calculator(combined, "VIX")
-combined = es_calc.calculate_values_vix(10)
-log_message = "Additional columns with calculations returned from calculator"
+# Pass cleaned data frame to calculator for specific calculations from specific method for VIX.
+vix_calc = sc.Calculator(combined, "VIX")
+combined = vix_calc.calculate_values_vix(10)
+log_message = "Additional columns with calculations returned from calculator VIX"
+processor_logger.parser(module, log_message)
+
+# Pass cleaned data frame to calculator for specific calculations from specific method for VIX.
+es_calc = sc.Calculator(combined, "ES")
+combined = es_calc.calculate_values_es(10)
+log_message = "Additional columns with calculations returned from calculator for ES"
 processor_logger.parser(module, log_message)
 
 # Make trading entry decision foe es_vix_long strategy
@@ -48,13 +54,33 @@ es_decision = st.Trading(combined)
 log_message = es_decision.es_vix_long("entry")
 processor_logger.parser(module, log_message)
 
-# Make trading entry decision foe es_vix_long strategy
+# Make trading exit decision foe es_vix_long strategy
 es_decision = st.Trading(combined)
 log_message = es_decision.es_vix_long("exit")
 processor_logger.parser(module, log_message)
 
+# Retrieve evaluated data for making trades using get_evaluated_data method.
+es_evaluated_data = es_decision.get_evaluated_data()
+print("-------------------------------------------------------------------------")
+print(es_evaluated_data)
+print("-------------------------------------------------------------------------")
 
-combined['VIX_Ndt'].tail(20).plot(color='red')
-plt.show()
-combined['VIX_Pdf'].tail(20).plot(color='blue')
-plt.show()
+# Experiments to turn to JSON object but currently missing the index which isn't too hot.
+# Needs fixing.
+#print(es_evaluated_data.iloc[0].to_json(orient='index'))
+#print(es_evaluated_data.iloc[1].to_json(orient='index'))
+
+# Experiments to sift entire clean dataset for entry and exit criteria to look at backtesting options
+# This involved the creation of a new column time shift percentage change for the following day after a prime signal
+# This in itself will make the if/else condition in sierra_trade for condition 2 more simple.
+# backtest_entry_1 = combined[(combined['VIX_Ndt'] > 0.841) & (combined['VIX_Pdf'] > 0) & (combined['VIX_Pdf'] < 0.03)]
+# backtest_entry_2 = combined[(combined['VIX_NdtY'] > 0.841) & (combined['VIX_PdfY'] > -0.03) & (combined['VIX_PdfY'] < 0.03) & (combined['VIX_Pdf'] < 0)]
+# backtest_exit = combined[(combined['VIX_Ndt'] < 0.159) & (combined['VIX_Pdf'] > -0.03) & (combined['VIX_Pdf'] < 0.03)]
+# print(backtest_entry_1.iloc[:,[3,9,12,13,14,15]].tail(5))
+# print(backtest_entry_2.iloc[:,[3,9,12,13,14,15]].tail(5))
+# print(backtest_exit.iloc[:,[3,9,12,13,14,15]].tail(5))
+
+#combined['VIX_Ndt'].tail(20).plot(color='red')
+#plt.show()
+#combined['VIX_Pdf'].tail(20).plot(color='blue')
+#plt.show()

@@ -3,7 +3,7 @@ import sierra_logger as sl
 
 
 class Importer:
-    """Class to import csv files generated from Sierra Charts and process into a usable time-series dataframe"""
+    """Class to import csv files generated from Sierra Charts and process into a usable time-series data-frame"""
 
     def __init__(self, working_directory, file_name, column_id):
         self.working_dir = working_directory
@@ -20,7 +20,6 @@ class Importer:
 
         # Import the file as csv into a dataframe
         # Specify the headers for the dataframe using the column_id
-        # Ensure that the index is converted to a time series
         self.data_frame = pd.read_csv(self.full_path,
                                       header=0,
                                       names=['Date',
@@ -34,6 +33,7 @@ class Importer:
                                              self.column_id + '_Bid',
                                              self.column_id + '_Ask'],
                                       index_col=0)
+        # Ensure that the index is converted to a time series
         self.data_frame.index = pd.to_datetime(self.data_frame.index)
         log_message = "Full data frame created for " + self.column_id
         importer_logger.parser(self.module, log_message)
