@@ -2,7 +2,7 @@ import datetime
 
 
 class Logging:
-    """Class to catch logging messages from ES application"""
+    """Class to catch logging messages from ES application. To be eventually developed to write to filesystem"""
 
     def __init__(self):
         self.data = []
