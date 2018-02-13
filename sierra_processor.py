@@ -67,20 +67,28 @@ print("-------------------------------------------------------------------------
 
 # Experiments to turn to JSON object but currently missing the index which isn't too hot.
 # Needs fixing.
-#print(es_evaluated_data.iloc[0].to_json(orient='index'))
-#print(es_evaluated_data.iloc[1].to_json(orient='index'))
+# print(es_evaluated_data.iloc[0].to_json(orient='index'))
+# print(es_evaluated_data.iloc[1].to_json(orient='index'))
 
 # Experiments to sift entire clean dataset for entry and exit criteria to look at backtesting options
 # This involved the creation of a new column time shift percentage change for the following day after a prime signal
 # This in itself will make the if/else condition in sierra_trade for condition 2 more simple.
-# backtest_entry_1 = combined[(combined['VIX_Ndt'] > 0.841) & (combined['VIX_Pdf'] > 0) & (combined['VIX_Pdf'] < 0.03)]
-# backtest_entry_2 = combined[(combined['VIX_NdtY'] > 0.841) & (combined['VIX_PdfY'] > -0.03) & (combined['VIX_PdfY'] < 0.03) & (combined['VIX_Pdf'] < 0)]
-# backtest_exit = combined[(combined['VIX_Ndt'] < 0.159) & (combined['VIX_Pdf'] > -0.03) & (combined['VIX_Pdf'] < 0.03)]
-# print(backtest_entry_1.iloc[:,[3,9,12,13,14,15]].tail(5))
-# print(backtest_entry_2.iloc[:,[3,9,12,13,14,15]].tail(5))
-# print(backtest_exit.iloc[:,[3,9,12,13,14,15]].tail(5))
+backtest_entry_1 = combined[(combined['VIX_Ndt'] > 0.841) & (combined['VIX_Pdf'] > 0) & (combined['VIX_Pdf'] < 0.03)]
+backtest_entry_2 = combined[
+    (combined['VIX_NdtY'] > 0.841) & (combined['VIX_PdfY'] > -0.03) & (combined['VIX_PdfY'] < 0.03) & (
+                combined['VIX_Pdf'] < 0)]
+backtest_exit = combined[(combined['VIX_Ndt'] < 0.159) & (combined['VIX_Pdf'] > -0.03) & (combined['VIX_Pdf'] < 0.03)]
+print(backtest_entry_1.iloc[:, [3, 9, 12, 13, 14, 15, 18]].tail(5))
+print(backtest_entry_2.iloc[:, [3, 9, 12, 13, 14, 15, 18]].tail(5))
+print(backtest_exit.iloc[:, [3, 9, 12, 13, 14, 15, 18]].tail(5))
 
-#combined['VIX_Ndt'].tail(20).plot(color='red')
-#plt.show()
-#combined['VIX_Pdf'].tail(20).plot(color='blue')
-#plt.show()
+
+plt.show()
+plt.figure(1)
+plt.subplot(211)
+combined['ES_Stop'].tail(20).plot(color='red')
+plt.subplot(212)
+combined['VIX_Ndt'].tail(20).plot(color='blue')
+#plt.subplot(212)
+#plt.plot(combined.index, combined['ES_Stop'], 'bs', combined.index, combined['VIX_Pdf', 'g^'])
+plt.show()
