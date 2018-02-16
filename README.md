@@ -4,7 +4,7 @@ ES is a Python based automated trading application, currently in development:
 
 **Importer**: Data ingestion currently from output of EoD data from Sierra Charts, to be converted to real time data feed.
 
-**Logger**: Basic logging, currently written to console but eventually to be written to log file in S3.
+**Logger**: Removed as this has been superseded by using the Python standard logging library
 
 **Calculator**: Perform additional calculations on base data from importer to be able to make trade entry, exit & risk decisions.
 

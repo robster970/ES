@@ -1,14 +1,12 @@
-import datetime
-
-
-class Logging:
-    """Class to catch logging messages from ES application. To be eventually developed to write to filesystem"""
-
-    def __init__(self):
-        self.data = []
-
-    @staticmethod
-    def parser(module, message):
-        timestamp = datetime.datetime.now()
-        timestamp = timestamp.strftime("%A, %d. %B %Y %H:%M:%S.%f")
-        print(timestamp + " : " + module + " : " + message)
+# import logging
+# import logging.config
+#
+# class Logging:
+#     def __init__(self, module_name):
+#         self.module_name = module_name
+#
+#         logging.config.fileConfig('logging.conf')
+#         self.logger = logging.getLogger(module_name)
+#
+#     def create(self):
+#         return self.logger

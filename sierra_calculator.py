@@ -1,5 +1,5 @@
-import sierra_logger as sl
 from scipy.stats import norm
+import logging
 
 
 class Calculator:
@@ -13,9 +13,9 @@ class Calculator:
 
         # Create new logging instance
         # Log where file is ingested from
-        importer_logger = sl.Logging()
+        self.logger = logging.getLogger(__name__)
         log_message = "Data frame passed in for: " + self.column_id
-        importer_logger.parser(self.module, log_message)
+        self.logger.debug(log_message)
 
     def calculate_values_vix(self, rolling_period):
         # Add the new columns for calculation of VIX avg & std
@@ -33,9 +33,8 @@ class Calculator:
         self.data_frame[self.column_id + '_NdtY'] = self.data_frame[self.column_id + '_Ndt'].shift(1)
         self.data_frame[self.column_id + '_PdfY'] = self.data_frame[self.column_id + '_Pdf'].shift(1)
         # Logging statement
-        importer_logger = sl.Logging()
         log_message = "Calculations performed for VIX method: " + self.column_id
-        importer_logger.parser(self.module, log_message)
+        self.logger.debug(log_message)
         return self.data_frame
 
     def calculate_values_es(self, rolling_period):
@@ -47,4 +46,7 @@ class Calculator:
         self.data_frame[self.column_id + '_Atr'] = self.data_frame[self.column_id + '_Tr'].rolling(
             rolling_period).mean()
         self.data_frame[self.column_id + '_Stop'] = self.data_frame[self.column_id + '_Atr'] * stop_factor
+        # Logging statement
+        log_message = "Calculations performed for ES method: " + self.column_id
+        self.logger.debug(log_message)
         return self.data_frame
