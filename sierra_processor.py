@@ -1,6 +1,7 @@
 import sierra_importer as si
 import sierra_calculator as sc
 import sierra_trade as st
+import sierra_backtest as sb
 import pandas as pd
 import matplotlib.pyplot as plt
 import warnings
@@ -41,7 +42,7 @@ logger.info(log_message)
 # Pass cleaned data frame to calculator for specific calculations from specific method for VIX.
 vix_calc = sc.Calculator(combined, "VIX")
 combined = vix_calc.calculate_values_vix(10)
-log_message = "Additional columns with calculations returned from calculator VIX"
+log_message = "Additional columns with calculations returned from calculator for VIX"
 logger.info(log_message)
 
 # Pass cleaned data frame to calculator for specific calculations from specific method for ES.
@@ -78,18 +79,8 @@ print("-------------------------------------------------------------------------
 # print(es_evaluated_data.iloc[0].to_json(orient='index'))
 # print(es_evaluated_data.iloc[1].to_json(orient='index'))
 
-# Experiments to sift entire clean dataset for entry and exit criteria to look at backtesting options
-# This involved the creation of a new column time shift percentage change for the following day after a prime signal
-# This in itself will make the if/else condition in sierra_trade for condition 2 more simple.
-backtest_entry_1 = combined[(combined['VIX_Ndt'] > 0.841) & (combined['VIX_Pdf'] > 0) & (combined['VIX_Pdf'] < 0.03)]
-backtest_entry_2 = combined[
-    (combined['VIX_NdtY'] > 0.841) & (combined['VIX_PdfY'] > -0.03) & (combined['VIX_PdfY'] < 0.03) & (
-                combined['VIX_Pdf'] < 0)]
-backtest_exit = combined[(combined['VIX_Ndt'] < 0.159) & (combined['VIX_Pdf'] > -0.03) & (combined['VIX_Pdf'] < 0.03)]
-print(backtest_entry_1.iloc[:, [3, 9, 12, 13, 14, 15, 18]].tail(5))
-print(backtest_entry_2.iloc[:, [3, 9, 12, 13, 14, 15, 18]].tail(5))
-print(backtest_exit.iloc[:, [3, 9, 12, 13, 14, 15, 18]].tail(5))
-
+# Run a backtest
+sb.Backtest(combined).es_vix_long_test()
 
 plt.show()
 plt.figure(1)
