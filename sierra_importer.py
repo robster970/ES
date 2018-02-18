@@ -39,19 +39,23 @@ class Importer:
 
         # Import the file as csv into a dataframe
         # Specify the headers for the dataframe using the column_id
-        self.data_frame = pd.read_csv(self.full_path,
-                                      header=0,
-                                      names=['Date',
-                                             self.column_id + '_Time',
-                                             self.column_id + '_Open',
-                                             self.column_id + '_High',
-                                             self.column_id + '_Low',
-                                             self.column_id + '_Last',
-                                             self.column_id + '_Vol',
-                                             self.column_id + '_NoT',
-                                             self.column_id + '_Bid',
-                                             self.column_id + '_Ask'],
-                                      index_col=0)
+        try:
+            self.data_frame = pd.read_csv(self.full_path,
+                                          header=0,
+                                          names=['Date',
+                                                 self.column_id + '_Time',
+                                                 self.column_id + '_Open',
+                                                 self.column_id + '_High',
+                                                 self.column_id + '_Low',
+                                                 self.column_id + '_Last',
+                                                 self.column_id + '_Vol',
+                                                 self.column_id + '_NoT',
+                                                 self.column_id + '_Bid',
+                                                 self.column_id + '_Ask'],
+                                          index_col=0)
+        except FileNotFoundError:
+            raise InvalidFileAttributes('File not found: {}'.format(self.full_path))
+
         # Ensure that the index is converted to a time series
         self.data_frame.index = pd.to_datetime(self.data_frame.index)
         log_message = "Full data frame created for " + self.column_id
