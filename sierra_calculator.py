@@ -1,4 +1,5 @@
 from scipy.stats import norm
+import pandas as pd
 import logging
 
 
@@ -7,13 +8,26 @@ class Calculator:
     made based upon the trading strategy being tested in sierra_trade"""
 
     def __init__(self, data_frame, column_id):
-        self.data_frame = data_frame
-        self.column_id = column_id
-        self.module = "sierra_calculator"
+
+        # Create new logging instance
+        self.logger = logging.getLogger(__name__)
+
+        if isinstance(data_frame, pd.DataFrame):
+            log_message = "Data frame is a valid pandas dataframe"
+            self.data_frame = data_frame
+        else:
+            raise InvalidDataAttributes('Invalid pandas dataframe: {}'.format(data_frame))
+        self.logger.debug(log_message)
+
+        if isinstance(column_id, str):
+            log_message = "Column Identifier is a valid string"
+            self.column_id = column_id
+        else:
+            raise InvalidDataAttributes('Invalid column identifier: {}'.format(column_id))
+        self.logger.debug(log_message)
 
         # Create new logging instance
         # Log where file is ingested from
-        self.logger = logging.getLogger(__name__)
         log_message = "Data frame passed in for: " + self.column_id
         self.logger.debug(log_message)
 
@@ -50,3 +64,8 @@ class Calculator:
         log_message = "Calculations performed for ES method: " + self.column_id
         self.logger.debug(log_message)
         return self.data_frame
+
+
+# Define class for exception handling of incorrect data frame attributes
+class InvalidDataAttributes(Exception):
+    pass
