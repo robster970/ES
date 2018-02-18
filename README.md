@@ -4,8 +4,6 @@ ES is a Python based automated trading application, currently in development:
 
 **Importer**: Data ingestion currently from output of EoD data from Sierra Charts, to be converted to real time data feed.
 
-**Logger**: Removed as this has been superseded by using the Python standard logging library
-
 **Calculator**: Perform additional calculations on base data from importer to be able to make trade entry, exit & risk decisions.
 
 **Trade**: Make assessments on calculated data for entry and exit criteria as well.
@@ -13,3 +11,5 @@ ES is a Python based automated trading application, currently in development:
 **Backtest**: Basic backtesting framework for trading strategies.
 
 **Processor**: Main execution process.
+
+**test_sierra**: Basic unit and integration tests.
