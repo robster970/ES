@@ -32,6 +32,13 @@ class Calculator:
         self.logger.debug(log_message)
 
     def calculate_values_vix(self, rolling_period):
+
+        if isinstance(rolling_period, int):
+            log_message = "Rolling period is a valid integer"
+        else:
+            raise InvalidDataAttributes('Invalid rolling period: {}'.format(rolling_period))
+        self.logger.debug(log_message)
+
         # Add the new columns for calculation of VIX avg & std
         # Do the calculations for rolling average, rolling std, normdist calculation and percentage change-lagged.
         self.data_frame[self.column_id + '_Avg'] = self.data_frame[self.column_id + '_Last'].rolling(
@@ -52,6 +59,13 @@ class Calculator:
         return self.data_frame
 
     def calculate_values_es(self, rolling_period):
+
+        if isinstance(rolling_period, int):
+            log_message = "Rolling period is a valid integer"
+        else:
+            raise InvalidDataAttributes('Invalid rolling period: {}'.format(rolling_period))
+        self.logger.debug(log_message)
+
         # Add the new columns for calculation of ES TR, rolling ATR & Stop
         # Do the calculations for TR a rolling ATR and a Stop which is a factor of ATR.
         stop_factor = 1.7
