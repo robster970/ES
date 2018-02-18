@@ -7,8 +7,6 @@ class Importer:
     """Class to import csv files generated from Sierra Charts and process into a usable time-series data-frame"""
 
     def __init__(self, working_directory, file_name, column_id):
-        # Define module name
-        self.module = "sierra_importer"
 
         # Create new logging instance
         self.logger = logging.getLogger(__name__)
@@ -67,6 +65,6 @@ class Importer:
         return redacted_data
 
 
-# Create class for exception handling of incorrect file attributes
+# Define class for exception handling of incorrect file attributes
 class InvalidFileAttributes(Exception):
     pass
