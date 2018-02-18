@@ -44,7 +44,23 @@ def test_importer_file_attributes_negative_3():
         Importer(working_directory, file_name, column_id)
 
 
-def test_importer_get_data_1():
+def test_importer_file_attributes_negative_4():
+    working_directory = "/home/robster970/repo/e-mini/sierrafiles"
+    file_name = "ESH18.dly_BarData.txt"
+    column_id = "TEST"
+    with pytest.raises(InvalidFileAttributes):
+        Importer(working_directory, file_name, column_id)
+
+
+def test_importer_file_attributes_negative_5():
+    working_directory = "/home/robster970/repo/e-mini/sierrafiles/"
+    file_name = "ESH18.dly_BarData.t"
+    column_id = "TEST"
+    with pytest.raises(InvalidFileAttributes):
+        Importer(working_directory, file_name, column_id)
+
+
+def test_importer_get_data_positive_1():
     working_directory = "/home/robster970/repo/e-mini/sierrafiles/"
     file_name = "ESH18.dly_BarData.txt"
     column_id = "ES"
