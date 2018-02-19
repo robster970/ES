@@ -7,3 +7,4 @@ install:
 
 script:
   - pytest
+  - npm install -g snyk
