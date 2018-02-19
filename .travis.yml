@@ -8,4 +8,5 @@ install:
 script:
   - pytest
   - npm install -g snyk
+  - snyk auth
   - snyk test
