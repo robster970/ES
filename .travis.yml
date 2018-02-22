@@ -12,4 +12,4 @@ script:
 
 after_success:
   - snyk monitor
-  - radon cc *.py -as
+  - radon cc sierra*.py -as
