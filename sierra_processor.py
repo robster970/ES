@@ -8,6 +8,8 @@ import warnings
 import logging.config
 import quandl
 
+rolling_period = 10
+
 logging.config.fileConfig('logging.conf')
 logger = logging.getLogger('sierra_processor')
 
@@ -19,15 +21,15 @@ warnings.filterwarnings("ignore")
 log_message = "Processing started"
 logger.info(log_message)
 
-# Import ES data
-es = si.Importer("/home/robster970/repo/e-mini/sierrafiles/", "ESH18.dly_BarData.txt", "ES")
-es_clean = es.get_data()
+# Import ES data - refactored using Sierra Method call
+es = si.Importer()
+es_clean = es.get_data_sierra("/home/robster970/repo/e-mini/sierrafiles/", "ESH18.dly_BarData.txt", "ES")
 log_message = "ES clean data set ready for use."
 logger.info(log_message)
 
-# Import VIX data
-vix = si.Importer("/home/robster970/repo/e-mini/sierrafiles/", "$VIX.dly_BarData.txt", "VIX")
-vix_clean = vix.get_data()
+# Import VIX data - refactored using Sierra Method call
+vix = si.Importer()
+vix_clean = vix.get_data_sierra("/home/robster970/repo/e-mini/sierrafiles/", "$VIX.dly_BarData.txt", "VIX")
 log_message = "VIX clean data set ready for use."
 logger.info(log_message)
 
@@ -42,13 +44,13 @@ logger.info(log_message)
 
 # Pass cleaned data frame to calculator for specific calculations from specific method for VIX.
 vix_calc = sc.Calculator(combined, "VIX")
-combined = vix_calc.calculate_values_vix(10)
+combined = vix_calc.calculate_values_vix(rolling_period)
 log_message = "Additional columns with calculations returned from calculator for VIX"
 logger.info(log_message)
 
 # Pass cleaned data frame to calculator for specific calculations from specific method for ES.
 es_calc = sc.Calculator(combined, "ES")
-combined = es_calc.calculate_values_es(10)
+combined = es_calc.calculate_values_es(rolling_period)
 log_message = "Additional columns with calculations returned from calculator for ES"
 logger.info(log_message)
 
@@ -84,6 +86,22 @@ es_stop_loss = es_decision.get_stop_loss()
 es_backtest_results = sb.Backtest(combined).es_vix_long_test()
 print(es_backtest_results.iloc[:, [3, 9, 12, 13, 14, 18, 19]].tail(10))
 
+# Request data from Quandel for ES
+log_message = "Getting ES data from Quandl"
+logger.info(log_message)
+es_quandl = quandl.get("CHRIS/CME_SP1", authtoken="9r5dMR3-riev4YMkjbeB")
+log_message = "ES Data retrieved from Quandl"
+logger.info(log_message)
+print(es_quandl.tail(10))
+
+# Request data from Quandel for VIX
+log_message = "Getting VIX data from Quandl"
+logger.info(log_message)
+vix_quandl = quandl.get("CHRIS/CBOE_VX1", authtoken="9r5dMR3-riev4YMkjbeB")
+log_message = "ES Data retrieved from Quandl"
+logger.info(log_message)
+print(vix_quandl.tail(10))
+
 plt.show()
 plt.figure(1)
 plt.subplot(211)
@@ -93,5 +111,3 @@ combined['VIX_Ndt'].tail(20).plot(color='blue')
 plt.subplot(212)
 # plt.plot(combined.index, combined['ES_Stop'], 'bs', combined.index, combined['VIX_Pdf', 'g^'])
 plt.show()
-
-quandl.ApiConfig.api_key = '9r5dMR3-riev4YMkjbeB'
