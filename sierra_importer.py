@@ -1,4 +1,6 @@
 import pandas as pd
+import quandl as qd
+from quandl.errors.quandl_error import NotFoundError
 import logging
 
 
@@ -15,6 +17,7 @@ class Importer:
         self.column_id = ""
         self.full_path = ""
         self.data_frame = []
+        self.handle = ""
 
     # Method to retrieve imported data
     def get_data_sierra(self, working_directory, file_name, column_id):
@@ -86,7 +89,45 @@ class Importer:
         # Return the requested data frame from the method call
         return redacted_data
 
+    def get_data_quandl(self, handle, column_id):
+
+        # Checks to ensure parameters passed in are valid
+        if isinstance(handle, str):
+            log_message = "API handle is a valid string"
+            self.handle = handle
+        else:
+            raise InvalidAPIAttributes('Invalid API attribute: {}'.format(handle))
+        self.logger.debug(log_message)
+
+        if isinstance(column_id, str):
+            log_message = "Column ID is a valid string"
+            self.column_id = column_id
+        else:
+            raise InvalidAPIAttributes('Invalid column ID: {}'.format(column_id))
+        self.logger.debug(log_message)
+
+        # Request data from Quandl
+        log_message = "Retrieving " + self.handle + " Quandl API"
+        self.logger.debug(log_message)
+
+        try:
+            self.data_frame = qd.get(self.handle, authtoken="9r5dMR3-riev4YMkjbeB")
+        except NotFoundError:
+            log_message = "Issue retrieving the data from Quandl API"
+            self.logger.debug(log_message)
+            raise InvalidAPIAttributes('Non-existent handle: {}'.format(handle))
+
+        log_message = self.handle + " retrieved from Quandl API"
+        self.logger.debug(log_message)
+
+        return self.data_frame
+
 
 # Define class for exception handling of incorrect file attributes
 class InvalidFileAttributes(Exception):
+    pass
+
+
+# Define class for exception handling of incorrect API attributes
+class InvalidAPIAttributes(Exception):
     pass
