@@ -6,10 +6,18 @@ import logging
 class Importer:
     """Class to import csv files generated from Sierra Charts and process into a usable time-series data-frame"""
 
-    def __init__(self, working_directory, file_name, column_id):
+    def __init__(self):
 
         # Create new logging instance
         self.logger = logging.getLogger(__name__)
+        self.working_dir = ""
+        self.file_name = ""
+        self.column_id = ""
+        self.full_path = ""
+        self.data_frame = []
+
+    # Method to retrieve imported data
+    def get_data_sierra(self, working_directory, file_name, column_id):
 
         # Checks to ensure parameters passed in are valid
         if isinstance(working_directory, str):
@@ -66,9 +74,6 @@ class Importer:
         # Logging statement to confirm creation of the object, and data frame from successful ingestion
         log_message = "Full data frame created for " + self.column_id
         self.logger.debug(log_message)
-
-    # Method to retrieve imported data
-    def get_data(self):
 
         # Reduce the data frame to just columns needed
         redacted_data = self.data_frame.iloc[:, 1:7]
