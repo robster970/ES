@@ -6,7 +6,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import warnings
 import logging.config
-import quandl
+
 
 rolling_period = 10
 
@@ -86,21 +86,22 @@ es_stop_loss = es_decision.get_stop_loss()
 es_backtest_results = sb.Backtest(combined).es_vix_long_test()
 print(es_backtest_results.iloc[:, [3, 9, 12, 13, 14, 18, 19]].tail(10))
 
-# Request data from Quandel for ES
+# Making a request to Quandl for ES data
 log_message = "Getting ES data from Quandl"
 logger.info(log_message)
-es_quandl = quandl.get("CHRIS/CME_SP1", authtoken="9r5dMR3-riev4YMkjbeB")
-log_message = "ES Data retrieved from Quandl"
+es = si.Importer()
+es_clean = es.get_data_quandl("CHRIS/CME_SP1", "ES")
+log_message = "ES data retrieved from Quandl"
 logger.info(log_message)
-print(es_quandl.tail(10))
 
-# Request data from Quandel for VIX
+# Making a request to Quandl for VIX data
 log_message = "Getting VIX data from Quandl"
 logger.info(log_message)
-vix_quandl = quandl.get("CHRIS/CBOE_VX1", authtoken="9r5dMR3-riev4YMkjbeB")
-log_message = "ES Data retrieved from Quandl"
+vix = si.Importer()
+vix_clean = vix.get_data_quandl("CHRIS/CBOE_VX1", "VIX")
+log_message = "VIX data retrieved from Quandl"
 logger.info(log_message)
-print(vix_quandl.tail(10))
+
 
 plt.show()
 plt.figure(1)
