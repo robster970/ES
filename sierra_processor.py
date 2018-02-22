@@ -6,6 +6,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import warnings
 import logging.config
+import quandl
 
 logging.config.fileConfig('logging.conf')
 logger = logging.getLogger('sierra_processor')
@@ -68,11 +69,11 @@ logger.info(log_message)
 # Retrieve evaluated data for making trades using get_evaluated_data method.
 es_evaluated_data = es_decision.get_evaluated_data()
 es_stop_loss = es_decision.get_stop_loss()
-print("-------------------------------------------------------------------------")
-print(es_evaluated_data)
-print("-------------------------------------------------------------------------")
-print("Stop loss: " + str(es_stop_loss))
-print("-------------------------------------------------------------------------")
+# print("-------------------------------------------------------------------------")
+# print(es_evaluated_data)
+# print("-------------------------------------------------------------------------")
+# print("Stop loss: " + str(es_stop_loss))
+# print("-------------------------------------------------------------------------")
 
 # Experiments to turn to JSON object but currently missing the index which isn't too hot.
 # Needs fixing.
@@ -80,7 +81,8 @@ print("-------------------------------------------------------------------------
 # print(es_evaluated_data.iloc[1].to_json(orient='index'))
 
 # Run a backtest
-sb.Backtest(combined).es_vix_long_test()
+es_backtest_results = sb.Backtest(combined).es_vix_long_test()
+print(es_backtest_results.iloc[:, [3, 9, 12, 13, 14, 18, 19]].tail(10))
 
 plt.show()
 plt.figure(1)
@@ -91,3 +93,5 @@ combined['VIX_Ndt'].tail(20).plot(color='blue')
 plt.subplot(212)
 # plt.plot(combined.index, combined['ES_Stop'], 'bs', combined.index, combined['VIX_Pdf', 'g^'])
 plt.show()
+
+quandl.ApiConfig.api_key = '9r5dMR3-riev4YMkjbeB'
