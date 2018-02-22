@@ -1,4 +1,4 @@
-from sierra_importer import Importer, InvalidFileAttributes
+from sierra_importer import Importer, InvalidFileAttributes, InvalidAPIAttributes
 from sierra_calculator import Calculator, InvalidDataAttributes
 import pandas as pd
 import pytest
@@ -13,14 +13,14 @@ warnings.filterwarnings("ignore")
 #########################
 # sierra_importer tests #
 #########################
-def test_importer_file_attributes_positive_1():
+def test_importer_sierra_file_attributes_positive_1():
     working_directory = ".sierra_data/"
     file_name = "ESH18.dly_BarData.txt"
     column_id = "TEST"
     assert Importer().get_data_sierra(working_directory, file_name, column_id) is not None
 
 
-def test_importer_file_attributes_negative_1():
+def test_importer_sierra_file_attributes_negative_1():
     working_directory = 24.6784
     file_name = "ESH18.dly_BarData.txt"
     column_id = "TEST"
@@ -28,7 +28,7 @@ def test_importer_file_attributes_negative_1():
         Importer().get_data_sierra(working_directory, file_name, column_id)
 
 
-def test_importer_file_attributes_negative_2():
+def test_importer_sierra_file_attributes_negative_2():
     working_directory = ".sierra_data/"
     file_name = [1, 2, 3, 4, 5]
     column_id = "TEST"
@@ -36,7 +36,7 @@ def test_importer_file_attributes_negative_2():
         Importer().get_data_sierra(working_directory, file_name, column_id)
 
 
-def test_importer_file_attributes_negative_3():
+def test_importer_sierra_file_attributes_negative_3():
     working_directory = ".sierra_data/"
     file_name = "ESH18.dly_BarData.txt"
     column_id = 123.45678
@@ -44,7 +44,7 @@ def test_importer_file_attributes_negative_3():
         Importer().get_data_sierra(working_directory, file_name, column_id)
 
 
-def test_importer_file_attributes_negative_4():
+def test_importer_sierra_file_attributes_negative_4():
     working_directory = ".sierra_data"
     file_name = "ESH18.dly_BarData.txt"
     column_id = "TEST"
@@ -52,7 +52,7 @@ def test_importer_file_attributes_negative_4():
         Importer().get_data_sierra(working_directory, file_name, column_id)
 
 
-def test_importer_file_attributes_negative_5():
+def test_importer_sierra_file_attributes_negative_5():
     working_directory = ".sierra_data/"
     file_name = "ESH18.dly_BarData.t"
     column_id = "TEST"
@@ -68,9 +68,31 @@ def test_importer_file_attributes_negative_5():
 #     assert test_object.get_data() is not None
 
 
+def test_importer_quandl_api_attributes_positive_1():
+    handle = "CHRIS/CBOE_VX1"
+    column_id = "TEST"
+    assert Importer().get_data_quandl(handle, column_id) is not None
+
+
+def test_importer_quandl_api_attributes_negative_1():
+    handle = "BE/MY_GUEST"
+    column_id = "TEST"
+    with pytest.raises(InvalidAPIAttributes):
+        Importer().get_data_quandl(handle, column_id)
+
+
+def test_importer_quandl_api_attributes_negative_2():
+    handle = "CHRIS/CBOE_VX1"
+    column_id = 1234
+    with pytest.raises(InvalidAPIAttributes):
+        Importer().get_data_quandl(handle, column_id)
+
+
 ###########################
 # sierra_calculator tests #
 ###########################
+
+
 @pytest.fixture()
 def vix_test_object():
     column_id = "TEST"
