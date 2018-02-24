@@ -3,6 +3,7 @@ import pandas as pd
 
 
 class Backtest:
+    """Class to execute trading decisions in a backtest context"""
     def __init__(self, combined):
         self.combined = combined
 
