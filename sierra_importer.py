@@ -120,6 +120,43 @@ class Importer:
         log_message = self.handle + " retrieved from Quandl API"
         self.logger.debug(log_message)
 
+        if self.column_id == "ES":
+            self.data_frame.columns = [self.column_id + '_Open',
+                                       self.column_id + '_High',
+                                       self.column_id + '_Low',
+                                       self.column_id + '_Last',
+                                       self.column_id + '_Change',
+                                       self.column_id + '_Settle',
+                                       self.column_id + '_Vol',
+                                       self.column_id + '_NoT']
+
+            self.data_frame = pd.DataFrame(self.data_frame)
+
+            self.data_frame = self.data_frame.iloc[:, [0, 1, 2, 3, 6, 7]]
+
+            self.data_frame[self.column_id + '_Vol'] = 0
+            self.data_frame[self.column_id + '_NoT'] = 0
+
+        elif self.column_id == "VIX":
+            self.data_frame.columns = [self.column_id + '_Open',
+                                       self.column_id + '_High',
+                                       self.column_id + '_Low',
+                                       self.column_id + '_Last',
+                                       self.column_id + '_Settle',
+                                       self.column_id + '_Change',
+                                       self.column_id + '_Vol',
+                                       self.column_id + '_EFP',
+                                       self.column_id + '_OI']
+
+            self.data_frame = pd.DataFrame(self.data_frame)
+
+            self.data_frame = self.data_frame.iloc[:, [0, 1, 2, 3]]
+
+        else:
+            log_message = self.handle + " is not a recognised handle"
+            self.logger.debug(log_message)
+            raise InvalidAPIAttributes('Invalid handle passed for processing: {}'.format(column_id))
+
         return self.data_frame
 
 
