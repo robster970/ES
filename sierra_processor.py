@@ -6,9 +6,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import warnings
 import logging.config
+import sys
+import time
 
 
-# Define class for exception handling used for not having a defined processor
+# Define class for exception handling in main processor
 class MainSierraException(Exception):
     pass
 
@@ -16,9 +18,10 @@ class MainSierraException(Exception):
 # Initialise variables
 rolling_period = 10
 source = "S"
-es_clean = []
-vix_clean = []
+output_directory_location = '.output/'
+write_files = "Y"
 
+# Pickup logging configuration and create logger for Processor
 logging.config.fileConfig('logging.conf')
 logger = logging.getLogger('sierra_processor')
 
@@ -26,10 +29,13 @@ logger = logging.getLogger('sierra_processor')
 # Need to find a better way of doing this.
 warnings.filterwarnings("ignore")
 
-# Set up logger
-log_message = "Processing started for: " + source
+# Log for start main processing
+log_message = "Processing: " + source + ". FileWrite: " + write_files + "."
 logger.info(log_message)
 
+# Determine how to process an import of data
+# Q is for Quandl API
+# S is for Sierra Charts text file
 if source == "Q":
     # Making a request to Quandl for ES data
     log_message = "Getting ES data from Quandl"
@@ -48,25 +54,25 @@ if source == "Q":
     logger.info(log_message)
 
 elif source == "S":
-    # Import ES data - refactored using Sierra Method call
+    # Import ES data from a Sierra Charts txt file
     es = si.Importer()
     es_clean = es.get_data_sierra("/home/robster970/repo/e-mini/sierrafiles/", "ESH18.dly_BarData.txt", "ES")
     log_message = "ES clean data set ready for use."
     logger.info(log_message)
 
-    # Import VIX data - refactored using Sierra Method call
+    # Import VIX data from a Sierra Charts txt file
     vix = si.Importer()
     vix_clean = vix.get_data_sierra("/home/robster970/repo/e-mini/sierrafiles/", "$VIX.dly_BarData.txt", "VIX")
     log_message = "VIX clean data set ready for use."
     logger.info(log_message)
 
-    # Tidy up VIX data to remove last two columns for volume and NumberOfTrades
+    # Tidy up VIX data to remove last two columns for Volume and NumberOfTrades
     vix_clean = vix_clean.iloc[:, 0:4]
 
 else:
-    raise MainSierraException('Invalid processing path: {}'.format(source))
+    raise MainSierraException('Invalid processing path for data source: {}'.format(source))
 
-# Create a single combined data frame to work from with NaN rows removed
+# Create a single combined data frame to work from with the NaN rows removed
 combined = pd.concat([es_clean, vix_clean], axis=1)
 combined = combined.dropna()
 log_message = "Combined ES & VIX clean data set ready for use."
@@ -101,11 +107,8 @@ logger.info(log_message)
 # Retrieve evaluated data for making trades using get_evaluated_data method.
 es_evaluated_data = es_decision.get_evaluated_data()
 es_stop_loss = es_decision.get_stop_loss()
-# print("-------------------------------------------------------------------------")
+
 # print(es_evaluated_data)
-# print("-------------------------------------------------------------------------")
-# print("Stop loss: " + str(es_stop_loss))
-# print("-------------------------------------------------------------------------")
 
 # Experiments to turn to JSON object but currently missing the index which isn't too hot.
 # Needs fixing.
@@ -116,8 +119,35 @@ es_stop_loss = es_decision.get_stop_loss()
 es_backtest_results = sb.Backtest(combined).es_vix_long_test()
 log_message = "Backtest results returned"
 logger.info(log_message)
-print(es_backtest_results.iloc[:, [3, 9, 12, 13, 14, 18, 19]].tail(10))
 
+# Write file outputs
+if write_files == "Y":
+    orig_stdout = sys.stdout
+    file_timestamp = time.strftime("%Y%m%d-%H%M%S")
+    try:
+        backtest_file = open(output_directory_location + source + '-' + file_timestamp + '.txt', 'w')
+        source_file = open(output_directory_location + 'combined-' + file_timestamp + '.txt', 'w')
+    except FileNotFoundError:
+        raise MainSierraException('Invalid directory for file output: {}'.format(source))
+
+    sys.stdout = backtest_file
+    print(es_backtest_results.iloc[:, [3, 9, 12, 13, 14, 18, 19]].tail(10))
+    sys.stdout = source_file
+    print(combined.tail(10))
+    sys.stdout = orig_stdout
+    backtest_file.close()
+    source_file.close()
+    log_message = "Files written to: " + output_directory_location + " & timestamped: " + file_timestamp
+    logger.info(log_message)
+else:
+    log_message = "No output files written for source and backtest files"
+    logger.info(log_message)
+
+print("--------------------------------------------------------------------------------")
+print(es_backtest_results.iloc[:, [3, 9, 12, 13, 14, 18, 19]].tail(10))
+print("--------------------------------------------------------------------------------")
+print("Required stop loss: " + str(es_stop_loss))
+print("--------------------------------------------------------------------------------")
 
 plt.show()
 plt.figure(1)
