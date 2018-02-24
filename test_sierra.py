@@ -70,13 +70,19 @@ def test_importer_sierra_file_attributes_negative_5():
 
 def test_importer_quandl_api_attributes_positive_1():
     handle = "CHRIS/CBOE_VX1"
-    column_id = "TEST"
+    column_id = "VIX"
+    assert Importer().get_data_quandl(handle, column_id) is not None
+
+
+def test_importer_quandl_api_attributes_positive_2():
+    handle = "CHRIS/CME_SP1"
+    column_id = "ES"
     assert Importer().get_data_quandl(handle, column_id) is not None
 
 
 def test_importer_quandl_api_attributes_negative_1():
     handle = "BE/MY_GUEST"
-    column_id = "TEST"
+    column_id = "ES"
     with pytest.raises(InvalidAPIAttributes):
         Importer().get_data_quandl(handle, column_id)
 
@@ -84,6 +90,13 @@ def test_importer_quandl_api_attributes_negative_1():
 def test_importer_quandl_api_attributes_negative_2():
     handle = "CHRIS/CBOE_VX1"
     column_id = 1234
+    with pytest.raises(InvalidAPIAttributes):
+        Importer().get_data_quandl(handle, column_id)
+
+
+def test_importer_quandl_api_attributes_negative_3():
+    handle = "CHRIS/CBOE_VX1"
+    column_id = "TEST"
     with pytest.raises(InvalidAPIAttributes):
         Importer().get_data_quandl(handle, column_id)
 
