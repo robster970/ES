@@ -168,4 +168,3 @@ class InvalidFileAttributes(Exception):
 # Define class for exception handling of incorrect API attributes
 class InvalidAPIAttributes(Exception):
     pass
-
