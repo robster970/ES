@@ -15,10 +15,9 @@ class MainSierraException(Exception):
     pass
 
 
-def main_processor():
+def main_processor(source):
     # Initialise variables
     rolling_period = 10
-    source = "S"
     output_directory_location = '.output/'
     write_files = "Y"
 
@@ -106,7 +105,7 @@ def main_processor():
     logger.info(log_message)
 
     # Retrieve evaluated data for making trades using get_evaluated_data method.
-    # es_evaluated_data = es_decision.get_evaluated_data()
+    es_evaluated_data = es_decision.get_evaluated_data()
     es_stop_loss = es_decision.get_stop_loss()
 
     # print(es_evaluated_data)
@@ -149,6 +148,7 @@ def main_processor():
     print("--------------------------------------------------------------------------------")
     print("Required stop loss: " + str(es_stop_loss))
     print("--------------------------------------------------------------------------------")
+    print(es_evaluated_data.tail(10))
 
     plt.show()
     plt.figure(1)
@@ -162,4 +162,5 @@ def main_processor():
     return
 
 
-main_processor()
+which = "Q"
+main_processor(which)
