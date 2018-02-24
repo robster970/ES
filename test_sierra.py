@@ -20,83 +20,35 @@ def test_importer_sierra_file_attributes_positive_1():
     assert Importer().get_data_sierra(working_directory, file_name, column_id) is not None
 
 
-def test_importer_sierra_file_attributes_negative_1():
-    working_directory = 24.6784
-    file_name = "ESH18.dly_BarData.txt"
-    column_id = "TEST"
+@pytest.mark.parametrize("working_directory, file_name, column_id", [
+    (3.1415, "ESH18.dly_BarData.txt", "TEST"),
+    (".sierra_data/", [1, 2, 3, 4, 5], "TEST"),
+    (".sierra_data/", "ESH18.dly_BarData.txt", 123.45678),
+    (".sierra_data", "ESH18.dly_BarData.txt", "TEST"),
+    (".sierra_data/", "ESH18.dly_BarData.t", "TEST"),
+
+])
+def test_importer_sierra_file_attributes_negative_combinations(working_directory, file_name, column_id):
     with pytest.raises(InvalidFileAttributes):
         Importer().get_data_sierra(working_directory, file_name, column_id)
 
 
-def test_importer_sierra_file_attributes_negative_2():
-    working_directory = ".sierra_data/"
-    file_name = [1, 2, 3, 4, 5]
-    column_id = "TEST"
-    with pytest.raises(InvalidFileAttributes):
-        Importer().get_data_sierra(working_directory, file_name, column_id)
+@pytest.mark.parametrize("handle,  column_id", [
+    ("CHRIS/CBOE_VX1", "VIX"),
+    ("CHRIS/CME_SP1", "ES"),
 
-
-def test_importer_sierra_file_attributes_negative_3():
-    working_directory = ".sierra_data/"
-    file_name = "ESH18.dly_BarData.txt"
-    column_id = 123.45678
-    with pytest.raises(InvalidFileAttributes):
-        Importer().get_data_sierra(working_directory, file_name, column_id)
-
-
-def test_importer_sierra_file_attributes_negative_4():
-    working_directory = ".sierra_data"
-    file_name = "ESH18.dly_BarData.txt"
-    column_id = "TEST"
-    with pytest.raises(InvalidFileAttributes):
-        Importer().get_data_sierra(working_directory, file_name, column_id)
-
-
-def test_importer_sierra_file_attributes_negative_5():
-    working_directory = ".sierra_data/"
-    file_name = "ESH18.dly_BarData.t"
-    column_id = "TEST"
-    with pytest.raises(InvalidFileAttributes):
-        Importer().get_data_sierra(working_directory, file_name, column_id)
-
-# # Test no longer valid as method structure included in main tests
-# def test_importer_get_data_positive_1():
-#     working_directory = ".sierra_data/"
-#     file_name = "ESH18.dly_BarData.txt"
-#     column_id = "ES"
-#     test_object = Importer(working_directory, file_name, column_id)
-#     assert test_object.get_data() is not None
-
-
-def test_importer_quandl_api_attributes_positive_1():
-    handle = "CHRIS/CBOE_VX1"
-    column_id = "VIX"
+])
+def test_importer_quandl_api_attributes_positive_combinations(handle, column_id):
     assert Importer().get_data_quandl(handle, column_id) is not None
 
 
-def test_importer_quandl_api_attributes_positive_2():
-    handle = "CHRIS/CME_SP1"
-    column_id = "ES"
-    assert Importer().get_data_quandl(handle, column_id) is not None
+@pytest.mark.parametrize("handle,  column_id", [
+    ("BE/MY_GUEST", "ES"),
+    ("CHRIS/CBOE_VX1", 34567),
+    ("CHRIS/CBOE_VX1", "TEST"),
 
-
-def test_importer_quandl_api_attributes_negative_1():
-    handle = "BE/MY_GUEST"
-    column_id = "ES"
-    with pytest.raises(InvalidAPIAttributes):
-        Importer().get_data_quandl(handle, column_id)
-
-
-def test_importer_quandl_api_attributes_negative_2():
-    handle = "CHRIS/CBOE_VX1"
-    column_id = 1234
-    with pytest.raises(InvalidAPIAttributes):
-        Importer().get_data_quandl(handle, column_id)
-
-
-def test_importer_quandl_api_attributes_negative_3():
-    handle = "CHRIS/CBOE_VX1"
-    column_id = "TEST"
+])
+def test_importer_quandl_api_attributes_negative_combinations(handle, column_id):
     with pytest.raises(InvalidAPIAttributes):
         Importer().get_data_quandl(handle, column_id)
 
