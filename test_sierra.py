@@ -1,6 +1,6 @@
 from sierra_importer import Importer, InvalidFileAttributes, InvalidAPIAttributes
 from sierra_calculator import Calculator, InvalidDataAttributes
-# from sierra_processor import main_processor, MainSierraException
+from sierra_processor import main_processor, MainSierraException
 import pandas as pd
 import pytest
 import warnings
@@ -11,22 +11,21 @@ import warnings
 warnings.filterwarnings("ignore")
 
 
-##########################
-# sierra_processor tests #
-##########################
-# @pytest.mark.parametrize("source", [
-#     "S",
-#     "Q",
-#     "A",
-#
-# ])
-# def test_processor_attributes_positive_combinations(source):
-#     try:
-#         main_processor(source)
-#     except MainSierraException:
-#         print("MainSierraException invoked correctly")
-#
-#
+#########################
+#sierra_processor tests #
+#########################
+@pytest.mark.parametrize("source", [
+    "Q",
+    "A",
+
+])
+def test_processor_attributes_positive_combinations(source):
+    try:
+        main_processor(source)
+    except MainSierraException:
+        print("MainSierraException invoked correctly")
+
+
 # def test_processor_attributes_negative_1():
 #     with pytest.raises(MainSierraException):
 #         source = "A"
