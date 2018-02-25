@@ -14,16 +14,18 @@ warnings.filterwarnings("ignore")
 #########################
 #sierra_processor tests #
 #########################
-@pytest.mark.parametrize("source", [
-    "Q",
-
-])
-def test_processor_attributes_positive_combinations(source):
-    try:
-        main_processor(source)
-    except MainSierraException:
-        print("MainSierraException invoked correctly")
-
+# @pytest.mark.parametrize("source", [
+#     "Q",
+#     "S",
+#     "A"
+#
+# ])
+# def test_processor_attributes_positive_combinations(source):
+#     try:
+#         main_processor(source)
+#     except MainSierraException:
+#         print("MainSierraException invoked correctly")
+#
 
 # def test_processor_attributes_negative_1():
 #     with pytest.raises(MainSierraException):
