@@ -1,6 +1,6 @@
 from sierra_importer import Importer, InvalidFileAttributes, InvalidAPIAttributes
 from sierra_calculator import Calculator, InvalidDataAttributes
-from sierra_processor import main_processor, MainSierraException
+# from sierra_processor import main_processor, MainSierraException
 import pandas as pd
 import pytest
 import warnings
@@ -26,11 +26,11 @@ warnings.filterwarnings("ignore")
 #     except MainSierraException:
 #         print("MainSierraException invoked correctly")
 #
-
-def test_processor_attributes_negative_1():
-    with pytest.raises(MainSierraException):
-        source = "A"
-        main_processor(source)
+#
+# def test_processor_attributes_negative_1():
+#     with pytest.raises(MainSierraException):
+#         source = "A"
+#         main_processor(source)
 
 
 #########################
