@@ -16,7 +16,6 @@ warnings.filterwarnings("ignore")
 #########################
 @pytest.mark.parametrize("source", [
     "Q",
-    "A",
 
 ])
 def test_processor_attributes_positive_combinations(source):
