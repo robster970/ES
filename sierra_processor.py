@@ -57,13 +57,13 @@ def main_processor(source):
     elif source == "S":
         # Import ES data from a Sierra Charts txt file
         es = si.Importer()
-        es_clean = es.get_data_sierra("/home/robster970/repo/e-mini/sierrafiles/", "ESH18.dly_BarData.txt", "ES")
+        es_clean = es.get_data_sierra(".sierra_data/", "ESH18.dly_BarData.txt", "ES")
         log_message = "ES clean data set ready for use."
         logger.info(log_message)
 
         # Import VIX data from a Sierra Charts txt file
         vix = si.Importer()
-        vix_clean = vix.get_data_sierra("/home/robster970/repo/e-mini/sierrafiles/", "$VIX.dly_BarData.txt", "VIX")
+        vix_clean = vix.get_data_sierra(".sierra_data/", "$VIX.dly_BarData.txt", "VIX")
         log_message = "VIX clean data set ready for use."
         logger.info(log_message)
 
