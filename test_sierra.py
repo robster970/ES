@@ -17,7 +17,6 @@ warnings.filterwarnings("ignore")
 @pytest.mark.parametrize("source", [
     "S",
     "Q",
-    "Brexit",
 
 ])
 def test_processor_attributes_positive_combinations(source):
