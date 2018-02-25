@@ -12,6 +12,7 @@ class Importer:
 
         # Create new logging instance
         self.logger = logging.getLogger(__name__)
+
         self.working_dir = ""
         self.file_name = ""
         self.column_id = ""
