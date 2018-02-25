@@ -17,9 +17,10 @@ class MainSierraException(Exception):
 
 def main_processor(source):
     # Initialise variables
+    plot_output = "N"
     rolling_period = 10
     output_directory_location = '.output/'
-    write_files = "Y"
+    write_files = "N"
 
     # Pickup logging configuration and create logger for Processor
     logging.config.fileConfig('logging.conf')
@@ -150,17 +151,25 @@ def main_processor(source):
     print("--------------------------------------------------------------------------------")
     print(es_evaluated_data.tail(10))
 
-    plt.show()
-    plt.figure(1)
-    plt.subplot(211)
-    combined['ES_Stop'].tail(20).plot(color='red')
-    plt.subplot(212)
-    combined['VIX_Ndt'].tail(20).plot(color='blue')
-    plt.subplot(212)
-    # plt.plot(combined.index, combined['ES_Stop'], 'bs', combined.index, combined['VIX_Pdf', 'g^'])
-    plt.show()
+    # Plotting the output via matplotlib.
+    # Note the use is plt.ion() in conjunction with the plt.pause allows the graph to be plotted
+    # using interactive and allowing the the python process to be non-blocked
+    # This is finally invoked outside of the function by plt.show() in the last line of the script
+    if plot_output == "Y":
+        plt.ion()
+        plt.figure(1)
+        plt.subplot(211)
+        combined['ES_Stop'].tail(20).plot(color='red')
+        plt.subplot(212)
+        combined['VIX_Ndt'].tail(20).plot(color='blue')
+        plt.subplot(212)
+        # plt.plot(combined.index, combined['ES_Stop'], 'bs', combined.index, combined['VIX_Pdf', 'g^'])
+        while True:
+            plt.pause(0.05)
+
     return
 
 
-which = "Q"
+which = "S"
 main_processor(which)
+plt.show(block=False)
