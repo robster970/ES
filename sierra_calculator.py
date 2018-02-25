@@ -4,7 +4,7 @@ import logging
 
 
 class Calculator:
-    """Class for performing additional calculations to imported and cleaned dataset to allow trading decisions to be
+    """Class for performing additional calculations to imported and cleaned data-sets to allow trading decisions to be
     made based upon the trading strategy being tested in sierra_trade"""
 
     def __init__(self, data_frame, column_id):

@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import warnings
 import logging.config
 import sys
+import os
 import time
 
 
@@ -170,6 +171,8 @@ def main_processor(source):
     return
 
 
+# Copy most recent sierra files to .sierra_data directory
+os.system('./sierra_copy.sh')
 which = "S"
 main_processor(which)
 plt.show(block=False)

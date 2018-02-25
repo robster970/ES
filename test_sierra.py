@@ -11,9 +11,9 @@ import warnings
 warnings.filterwarnings("ignore")
 
 
-#########################
-#sierra_processor tests #
-#########################
+##########################
+# sierra_processor tests #
+##########################
 @pytest.mark.parametrize("source", [
     "Q",
     "S",

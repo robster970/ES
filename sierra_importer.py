@@ -6,7 +6,7 @@ import logging
 
 # Define main Importer class
 class Importer:
-    """Class to import csv files generated from Sierra Charts and process into a usable time-series data-frame"""
+    """Class to import data from Sierra Charts files of Quandl API and process into a usable time-series data-frame"""
 
     def __init__(self):
 
