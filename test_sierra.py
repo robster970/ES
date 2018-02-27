@@ -1,6 +1,7 @@
 from sierra_importer import Importer, InvalidFileAttributes, InvalidAPIAttributes
 from sierra_calculator import Calculator, InvalidDataAttributes
 from sierra_processor import main_processor, MainSierraException
+from sierra_trade import Trading, InvalidTradeAttributes
 import pandas as pd
 import pytest
 import warnings
@@ -155,3 +156,72 @@ def test_calculator_calculate_es_values_negative_1():
     rolling_period = "Yes"
     with pytest.raises(InvalidDataAttributes):
         es_test_object().calculate_values_es(rolling_period)
+
+
+###########################
+# sierra_trade tests      #
+###########################
+@pytest.fixture()
+def combined_test_object():
+    es = Importer()
+    es_clean = es.get_data_sierra(".sierra_data/", "ESH18.dly_BarData.txt", "ES")
+    vix = Importer()
+    vix_clean = vix.get_data_sierra(".sierra_data/", "$VIX.dly_BarData.txt", "VIX")
+    vix_clean = vix_clean.iloc[:, 0:4]
+    combined = pd.concat([es_clean, vix_clean], axis=1)
+    combined = combined.dropna()
+    vix_column_id = "VIX"
+    es_column_id = "ES"
+    rolling_period = 10
+    vix_input = Calculator(combined, vix_column_id)
+    combined = vix_input.calculate_values_vix(rolling_period)
+    es_input = Calculator(combined, es_column_id)
+    combined = es_input.calculate_values_es(rolling_period)
+    return combined
+
+
+def test_trade_data_attributes_positive():
+    assert Trading(combined_test_object()) is not None
+
+
+def test_trade_data_attributes_negative_1():
+    bad_dataframe = [1, 3, 5, 7, 9]
+    with pytest.raises(InvalidTradeAttributes):
+        Trading(bad_dataframe)
+
+
+@pytest.mark.parametrize("status", [
+    "entry",
+    "exit",
+    "Brexit",
+    3.1415,
+
+])
+def test_trade_processor_type_positive_combinations(status):
+    try:
+        f = combined_test_object()
+        g = Trading(f)
+        assert g.es_vix_long(status).find("TRADE ACTION")
+    except InvalidTradeAttributes:
+        print("InvalidTradeAttributes exception invoked")
+
+
+def test_trade_processor_type_negative_1():
+    f = combined_test_object()
+    g = Trading(f)
+    with pytest.raises(InvalidTradeAttributes):
+        g.es_vix_long('Brexit')
+
+
+def test_trade_processor_get_data_positive():
+    f = combined_test_object()
+    g = Trading(f)
+    g.es_vix_long("entry")
+    assert g.get_evaluated_data() is not None
+
+
+def test_trade_processor_get_stop_positive():
+    f = combined_test_object()
+    g = Trading(f)
+    g.es_vix_long("entry")
+    assert isinstance(g.get_stop_loss(), (int, float, complex))
