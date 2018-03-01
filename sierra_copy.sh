@@ -1,1 +1,5 @@
-cp ~/repo/e-mini/sierrafiles/* .sierra_data/
+#!/bin/bash
+
+cd ~/repo/e-mini
+git pull
+cp ~/repo/e-mini/sierrafiles/* ~/PycharmProjects/ES/.sierra_data/
