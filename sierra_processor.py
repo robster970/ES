@@ -149,8 +149,9 @@ def main_processor(source):
     print(es_backtest_results.iloc[:, [3, 9, 12, 13, 14, 18, 19]].tail(10))
     print("--------------------------------------------------------------------------------")
     print("Required stop loss: " + str(es_stop_loss))
+    print("Evaluated data in backtest")
     print("--------------------------------------------------------------------------------")
-    print(es_evaluated_data.tail(10))
+    print(es_evaluated_data.iloc[:, [3, 9, 12, 13, 14, 18]].tail(10))
 
     # Plotting the output via matplotlib.
     # Note the use is plt.ion() in conjunction with the plt.pause allows the graph to be plotted
