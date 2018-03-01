@@ -174,6 +174,6 @@ def main_processor(source):
 
 # Copy most recent sierra files to .sierra_data directory
 os.system('./sierra_copy.sh')
-which = "S"
+which = "Q"
 main_processor(which)
 plt.show(block=False)
