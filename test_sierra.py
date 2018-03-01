@@ -228,9 +228,9 @@ def test_trade_processor_get_stop_positive():
     assert isinstance(g.get_stop_loss(), (int, float))
 
 
-###########################
-# sierra_trade tests      #
-###########################
+##############################
+# sierra_backtest tests      #
+##############################
 def test_backtest_data_attributes_positive():
     assert Backtest(combined_test_object()).es_vix_long_test() is not None
 
