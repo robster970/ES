@@ -2,6 +2,7 @@ from sierra_importer import Importer, InvalidFileAttributes, InvalidAPIAttribute
 from sierra_calculator import Calculator, InvalidDataAttributes
 from sierra_processor import main_processor, MainSierraException
 from sierra_trade import Trading, InvalidTradeAttributes
+from sierra_backtest import Backtest, InvalidBacktestAttributes
 import pandas as pd
 import pytest
 import warnings
@@ -224,4 +225,17 @@ def test_trade_processor_get_stop_positive():
     f = combined_test_object()
     g = Trading(f)
     g.es_vix_long("entry")
-    assert isinstance(g.get_stop_loss(), (int, float, complex))
+    assert isinstance(g.get_stop_loss(), (int, float))
+
+
+###########################
+# sierra_trade tests      #
+###########################
+def test_backtest_data_attributes_positive():
+    assert Backtest(combined_test_object()).es_vix_long_test() is not None
+
+
+def test_backtest_data_attributes_negative():
+    data_frame = [1, 2, 3, 4, 5]
+    with pytest.raises(InvalidBacktestAttributes):
+        Backtest(data_frame).es_vix_long_test()

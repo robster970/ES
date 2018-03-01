@@ -1,16 +1,23 @@
-import logging
 import pandas as pd
+import logging
 
 
 class Backtest:
     """Class to execute trading decisions in a backtest context"""
+
     def __init__(self, combined):
-        self.combined = combined
 
         # Create new logging instance
-        # Log where file is ingested from
         self.logger = logging.getLogger(__name__)
-        log_message = "Dataframe passed for backtest analysis"
+
+        self.combined = combined
+
+        # Checks to ensure parameters passed in are valid
+        if isinstance(combined, pd.DataFrame):
+            log_message = "Data frame is a valid pandas dataframe"
+            self.combined = combined
+        else:
+            raise InvalidBacktestAttributes('Invalid pandas dataframe: {}'.format(combined))
         self.logger.debug(log_message)
 
     def es_vix_long_test(self):
@@ -49,3 +56,8 @@ class Backtest:
         log_message = "Backtest completed and results returned"
         self.logger.debug(log_message)
         return backtest_result
+
+
+# Define class for exception handling of incorrect data frame attributes
+class InvalidBacktestAttributes(Exception):
+    pass
