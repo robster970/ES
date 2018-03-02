@@ -20,7 +20,7 @@ def main_processor(source):
     # Timestamp execution
     now = time.strftime("%H:%M:%S %d-%m-%Y", time.gmtime())
     # Copy most recent sierra files to .sierra_data directory
-    os.system('./sierra_copy.sh')
+    os.system('./sierra_copy_nginx.sh')
 
     # Initialise variables
     plot_output = "N"
