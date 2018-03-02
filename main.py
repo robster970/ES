@@ -1,10 +1,10 @@
 from flask import Flask, render_template
 import sierra_processor
 
-sierra_web = Flask(__name__)
+app = Flask(__name__)
 
 
-@sierra_web.route("/")
+@app.route("/")
 def main():
     which = "S"
     response = sierra_processor.main_processor(which)
@@ -23,4 +23,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sierra_web.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', debug=True)
