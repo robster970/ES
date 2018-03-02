@@ -55,13 +55,13 @@ class Trading:
                 self.signal = "TRADE ACTION: Long entry confirmed on condition 2: Post EoD confirmation turn."
                 self.stop = stop_2
             else:
-                self.signal = "NO TRADE ACTION REQUIRED: No entry conditions found"
+                self.signal = "NO ACTION REQUIRED: No entry conditions found"
         elif status == "exit":
             self.response = "Exit evaluation"
             if ((ndst_2 < 0.159) & (pdf_2 > -0.03) & (pdf_2 < 0.03)).all():
                 self.signal = "TRADE ACTION: Long exit confirmed on condition 1: EoD confirmation to exit."
             else:
-                self.signal = "NO TRADE ACTION REQUIRED:No exit conditions found"
+                self.signal = "NO ACTION REQUIRED: No exit conditions found"
         else:
             raise InvalidTradeAttributes('Invalid status identifier: {}'.format(status))
 
