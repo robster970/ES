@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Sierra Trading</title>
+    <script>
+        var source = {{source}}
+        var run = {{run}}
+        var entry = {{entry}}
+        var exit = {{exit}}
+        var stoploss = {{stoploss}}
+        var evaluated = {{evaluated}}
+        var backtest = {{backtest}}
+    </script>
+
+
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1 class="text-muted">PATD Capital: Sierra Trader</h1>
+        </div>
+
+        <div class="jumbotron">
+            <h3><b>Checked:</b> {{run}}</h3>
+            <h3><b>Source:</b> {{source}}</h3>
+            <h3><b>Entry analysis:</b> {{entry}}</h3>
+            <h3><b>Exit analysis:</b> {{exit}}</h3>
+            <h3><b>Required stop loss:</b> {{stoploss}}</h3>
+
+        </div>
+
+        <div class="row marketing">
+            <div class="col-lg-12">
+                <h4>Backtest data</h4>
+                <p>{{backtest}}</p>
+                <h4>Evaluated data</h4>
+                <p>{{evaluated}}</p>
+            </div>
+
+        </div>
+
+        <footer class="footer">
+            <p>&copy; PATD Capital 2018</p>
+        </footer>
+
+    </div>
+</body>
+
+</html>
