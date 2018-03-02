@@ -17,6 +17,11 @@ class MainSierraException(Exception):
 
 
 def main_processor(source):
+    # Timestamp execution
+    now = time.strftime("%H:%M:%S %d-%m-%Y", time.gmtime())
+    # Copy most recent sierra files to .sierra_data directory
+    os.system('./sierra_copy.sh')
+
     # Initialise variables
     plot_output = "N"
     rolling_period = 10
@@ -97,6 +102,7 @@ def main_processor(source):
     logger.info(log_message)
     es_decision = st.Trading(combined)
     log_message = es_decision.es_vix_long("entry")
+    es_entry_decision = log_message
     logger.info(log_message)
 
     # Make trading exit decision for es_vix_long strategy
@@ -104,6 +110,7 @@ def main_processor(source):
     logger.info(log_message)
     es_decision = st.Trading(combined)
     log_message = es_decision.es_vix_long("exit")
+    es_exit_decision = log_message
     logger.info(log_message)
 
     # Retrieve evaluated data for making trades using get_evaluated_data method.
@@ -153,6 +160,10 @@ def main_processor(source):
     print("--------------------------------------------------------------------------------")
     print(es_evaluated_data.iloc[:, [3, 9, 12, 13, 14, 18]].tail(10))
 
+    # Now tidy up the backtest results and evaluated data frames for passing back to web
+    es_backtest_results = es_backtest_results.iloc[:, [3, 9, 12, 13, 14, 18, 19]].tail(10)
+    es_evaluated_data = es_evaluated_data.iloc[:, [3, 9, 12, 13, 14, 18]].tail(10)
+
     # Plotting the output via matplotlib.
     # Note the use is plt.ion() in conjunction with the plt.pause allows the graph to be plotted
     # using interactive and allowing the the python process to be non-blocked
@@ -169,11 +180,10 @@ def main_processor(source):
         while True:
             plt.pause(0.05)
 
-    return
+    return {'RunDate': now, 'EntryDecision': es_entry_decision, 'ExitDecision': es_exit_decision,
+            'StopLoss': es_stop_loss, 'EvaluatedData': es_evaluated_data, 'BacktestResult': es_backtest_results}
 
 
-# Copy most recent sierra files to .sierra_data directory
-os.system('./sierra_copy.sh')
 which = "S"
 main_processor(which)
 plt.show(block=False)
