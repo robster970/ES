@@ -16,4 +16,4 @@ WORKDIR ES
 RUN pip install -r requirements.txt
 
 # Run it!
-CMD [ "python", "./sierra_processor.py" ]
+CMD [ "python", "./sierra_web.py" ]
