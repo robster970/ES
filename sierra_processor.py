@@ -19,6 +19,7 @@ class MainSierraException(Exception):
 def main_processor(source):
     # Timestamp execution
     now = time.strftime("%H:%M:%S %d-%m-%Y", time.gmtime())
+
     # Copy most recent sierra files to .sierra_data directory
     os.system('./sierra_copy_nginx.sh')
 
@@ -184,6 +185,4 @@ def main_processor(source):
             'StopLoss': es_stop_loss, 'EvaluatedData': es_evaluated_data, 'BacktestResult': es_backtest_results}
 
 
-which = "S"
-main_processor(which)
 plt.show(block=False)
