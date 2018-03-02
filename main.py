@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def main():
-    which = "S"
+    which = "Q"
     response = sierra_processor.main_processor(which)
     run_response = response['RunDate']
     entry_response = response['EntryDecision']
