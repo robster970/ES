@@ -23,4 +23,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sierra_web.run()
+    sierra_web.run(host='0.0.0.0')
