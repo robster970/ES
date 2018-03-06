@@ -32,6 +32,7 @@ pyflakes==1.6.0
 pyOpenSSL==17.5.0
 pyparsing==2.2.0
 pytest==3.4.1
+pytest-flask==0.10.0
 python-dateutil==2.6.1
 pytz==2018.3
 Quandl==3.3.0

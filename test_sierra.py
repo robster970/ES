@@ -3,7 +3,9 @@ from sierra_calculator import Calculator, InvalidDataAttributes
 from sierra_processor import main_processor, MainSierraException
 from sierra_trade import Trading, InvalidTradeAttributes
 from sierra_backtest import Backtest, InvalidBacktestAttributes
+from main import create_app
 import pandas as pd
+from flask import url_for
 import pytest
 import warnings
 
@@ -239,3 +241,18 @@ def test_backtest_data_attributes_negative():
     data_frame = [1, 2, 3, 4, 5]
     with pytest.raises(InvalidBacktestAttributes):
         Backtest(data_frame).es_vix_long_test()
+
+
+##########################
+# main webapp  tests     #
+##########################
+@pytest.fixture
+def app():
+    test_app = create_app()
+    test_app.debug = True
+    return test_app
+
+
+def test_web_app_positive(client):
+    response = client.get(url_for('main'))
+    assert response.status_code == 200

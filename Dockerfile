@@ -7,21 +7,23 @@ ENV SIERRA_ENV=PROD
 RUN mkdir -p /source
 WORKDIR /source
 
-# Clone repo for e-mini source data for sierra
-RUN git clone https://github.com/robster970/e-mini.git
-
 # Clone ES repo for latest update of ES
 RUN git clone https://github.com/robster970/ES.git
 
-# Set up main app directory and environment variable
+# Change directory and install Python dependencies
+WORKDIR /source/ES
+RUN pip install -r requirements.txt
+
+# Clone repo for e-mini source data for sierra
+WORKDIR /source
+RUN git clone https://github.com/robster970/e-mini.git
+
+# Set up main app directory
 WORKDIR /app
 RUN mkdir -p /app/.sierra_data
 
 # Copy main application into /app directory
 RUN cp -rp /source/ES/* .
-
-# Change directory and install Python dependencies
-RUN pip install -r requirements.txt
 
 # Run it!
 CMD [ "python", "./main.py" ]
