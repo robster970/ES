@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import sierra_processor
 
 
@@ -9,8 +9,15 @@ def create_app():
 
     @sierra_app.route("/")
     def main():
-        # Set which data source and run main processor
         which = "S"
+        # Set which data source and run main processor
+        # Validate whether a URL parameter has been passed in using 'source'
+        # Set the default to Sierra if nothing passed or it is invalid
+        if 'source' in request.args:
+            which = request.args['source']
+            if which not in ('S', 'Q'):
+                which = "S"
+
         response = sierra_processor.main_processor(which)
 
         # Handle the data required to render in the index.html template
