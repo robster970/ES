@@ -42,17 +42,17 @@ def test_processor_attributes_negative_1():
 #########################
 def test_importer_sierra_file_attributes_positive_1():
     working_directory = ".sierra_data/"
-    file_name = "ESH18.dly_BarData.txt"
+    file_name = "ESM18.dly_BarData.txt"
     column_id = "TEST"
     assert Importer().get_data_sierra(working_directory, file_name, column_id) is not None
 
 
 @pytest.mark.parametrize("working_directory, file_name, column_id", [
-    (3.1415, "ESH18.dly_BarData.txt", "TEST"),
+    (3.1415, "ESM18.dly_BarData.txt", "TEST"),
     (".sierra_data/", [1, 2, 3, 4, 5], "TEST"),
-    (".sierra_data/", "ESH18.dly_BarData.txt", 123.45678),
-    (".sierra_data", "ESH18.dly_BarData.txt", "TEST"),
-    (".sierra_data/", "ESH18.dly_BarData.t", "TEST"),
+    (".sierra_data/", "ESM18.dly_BarData.txt", 123.45678),
+    (".sierra_data", "ESM18.dly_BarData.txt", "TEST"),
+    (".sierra_data/", "ESM18.dly_BarData.t", "TEST"),
 
 ])
 def test_importer_sierra_file_attributes_negative_combinations(working_directory, file_name, column_id):
@@ -167,7 +167,7 @@ def test_calculator_calculate_es_values_negative_1():
 @pytest.fixture()
 def combined_test_object():
     es = Importer()
-    es_clean = es.get_data_sierra(".sierra_data/", "ESH18.dly_BarData.txt", "ES")
+    es_clean = es.get_data_sierra(".sierra_data/", "ESM18.dly_BarData.txt", "ES")
     vix = Importer()
     vix_clean = vix.get_data_sierra(".sierra_data/", "$VIX.dly_BarData.txt", "VIX")
     vix_clean = vix_clean.iloc[:, 0:4]
@@ -253,6 +253,6 @@ def app():
     return test_app
 
 
-def test_web_app_positive(client):
+def test_web_app_positive_1(client):
     response = client.get(url_for('main'))
     assert response.status_code == 200
