@@ -5,9 +5,6 @@ python:
 services:
   - docker
 
-env:
-  - DOCKER_USERNAME = robster970
-
 install:
   - pip install -r requirements.txt
 
