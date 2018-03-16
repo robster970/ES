@@ -40,7 +40,10 @@ def create_app():
     def notifications():
         notification_data = json.loads(request.data)
         print("JSON response from /notification POST: ", notification_data)
-        print notification_data['pusher']['repo_url']['repo_name']
+        pusher = notification_data['pusher']
+        repo_url = notification_data['repo_url']
+        repo_name = notification_data['repo_name']
+        print(pusher+", "+repo_url+", "+repo_name)
         return "OK"
 
     return sierra_app
