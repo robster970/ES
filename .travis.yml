@@ -14,7 +14,6 @@ script:
   - pytest
   - npm install -g snyk
 #  - snyk test
-#  - docker build -t sierra-nginx . --no-cache=True
 
 after_success:
 #  - snyk monitor
@@ -26,5 +25,5 @@ after_success:
   - docker push $DOCKER_USERNAME/sierra-nginx
   - docker run -p 127.0.0.1:80:5000 -d -t $DOCKER_USERNAME/sierra-nginx
   - docker ps -a
-  - curl -v 127.0.0.1:80
+  - curl -v "http://127.0.0.1"
 
