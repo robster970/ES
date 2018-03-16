@@ -19,5 +19,6 @@ script:
 after_success:
 #  - snyk monitor
   - radon cc sierra*.py -as
+  - curl 127.0.0.1
 
 before_deploy:
