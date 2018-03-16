@@ -22,5 +22,5 @@ after_success:
   - curl -v 127.0.0.1:80
 
 deploy:
-  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
-  - docker push robster970/sierra-nginx
+  - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+
