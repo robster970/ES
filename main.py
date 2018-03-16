@@ -39,7 +39,7 @@ def create_app():
     @sierra_app.route('/notifications', methods=['POST'])
     def notifications():
         notification_data = json.loads(request.data)
-        print("JSON response from notification POST: ", notification_data)
+        print("JSON response from /notification POST: ", notification_data)
         return "OK"
 
     return sierra_app
