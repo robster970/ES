@@ -24,7 +24,7 @@ after_success:
   - docker images
   - docker tag sierra-nginx $DOCKER_USERNAME/sierra-nginx
   - docker push $DOCKER_USERNAME/sierra-nginx
-  - docker run -p 127.0.0.1:80:5000 -d -t $REPO
+  - docker run -p 127.0.0.1:80:5000 -d -t $DOCKER_USERNAME/sierra-nginx
   - docker ps -a
   - curl -v 127.0.0.1:80
 
