@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 import sierra_processor
 import json
+import os
 
 
 # Set webapp name to app so it can be used by NGINX docker image
@@ -40,10 +41,13 @@ def create_app():
     def notifications():
         notification_data = json.loads(request.data)
         print("JSON response from /notification POST: ", notification_data)
-        pusher = notification_data['pusher']
-        repo_url = notification_data['repo_url']
-        repo_name = notification_data['repo_name']
-        print(pusher+", "+repo_url+", "+repo_name)
+        repo_name = "Brexiteer!"
+        # pusher = notification_data['pusher']
+        # repo_url = notification_data['repo_url']
+        # repo_name = notification_data['repo_name']+
+        # print("Validated: "+pusher+", "+repo_url+", "+repo_name)
+        if str(repo_name) == 'robster970/sierra-nginx':
+            os.system('./sierra_docker_update.sh')
         return "OK"
 
     return sierra_app
