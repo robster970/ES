@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 import sierra_processor
+import json
 
 
 # Set webapp name to app so it can be used by NGINX docker image
@@ -34,6 +35,13 @@ def create_app():
         return render_template('index.html', source=which, run=run_response, entry=entry_response, exit=exit_response,
                                stoploss=stop_loss_response, evaluated=evaluated_data_response,
                                backtest=backtest_results_response)
+
+    @sierra_app.route('/notifications', methods=['POST'])
+    def notifications():
+        notification_data = json.loads(request.data)
+        print("JSON response from notification POST: ", notification_data)
+        return "OK"
+
     return sierra_app
 
 
