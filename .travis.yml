@@ -19,5 +19,5 @@ after_success:
 
 before_deploy:
   - docker build -t sierra-nginx . --no-cache=True
-  - docker run -p 5000:5000 -d -t sierra-nginx
+  - docker run -p 127.0.0.1:80:5000 -d -t sierra-nginx
   - docker ps -a
