@@ -14,10 +14,10 @@ script:
   - pytest
   - npm install -g snyk
 #  - snyk test
-
-after_success:
 #  - snyk monitor
   - radon cc sierra*.py -as
+
+after_success:
   - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
   - docker build -f Dockerfile -t sierra-nginx . --no-cache=True
   - docker images
@@ -25,5 +25,5 @@ after_success:
   - docker push $DOCKER_USERNAME/sierra-nginx
   - docker run -p 127.0.0.1:80:5000 -d -t $DOCKER_USERNAME/sierra-nginx
   - docker ps -a
-  - curl -v "http://127.0.0.1"
+  - curl -v 127.0.0.1:80/source=S
 
