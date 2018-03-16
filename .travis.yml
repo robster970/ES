@@ -20,12 +20,10 @@ after_success:
 #  - snyk monitor
   - radon cc sierra*.py -as
   - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-  - export REPO=robster970/sierra-nginx
-  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
   - docker build -f Dockerfile -t sierra-nginx . --no-cache=True
-  - docker tag $REPO:$COMMIT $REPO:$TAG
-  - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
-  - docker push $REPO
+  - docker images
+  - docker tag sierra-nginx $DOCKER_USERNAME/sierra-nginx
+  - docker push $DOCKER_USERNAME/sierra-nginx
   - docker run -p 127.0.0.1:80:5000 -d -t $REPO
   - docker ps -a
   - curl -v 127.0.0.1:80
