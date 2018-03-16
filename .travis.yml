@@ -1,6 +1,9 @@
+sudo: required
 language: python
 python:
   - "3.6"
+services:
+  - docker
 
 install:
   - pip install -r requirements.txt
@@ -13,3 +16,8 @@ script:
 after_success:
 #  - snyk monitor
   - radon cc sierra*.py -as
+
+before_deploy:
+  - docker build -t sierra-nginx . --no-cache=True
+  - docker run -p 5000:5000 -d -t sierra-nginx
+  - docker ps -a
