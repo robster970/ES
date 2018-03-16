@@ -9,7 +9,6 @@ install:
   - pip install -r requirements.txt
 
 before_script:
-  - echo $DOCKER_USERNAME
 
 script:
   - pytest
@@ -24,4 +23,6 @@ after_success:
   - radon cc sierra*.py -as
   - curl -v 127.0.0.1:80
   - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  - docker push robster970/sierra-nginx
+  - docker images
 
