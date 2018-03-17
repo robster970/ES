@@ -42,11 +42,13 @@ def create_app():
         notification_data = json.loads(request.data)
         print("JSON response from /notification POST: ", notification_data)
         repo_name = "Brexiteer!"
+        repo_url = "Brexiteer!"
         # pusher = notification_data['pusher']
         # repo_url = notification_data['repo_url']
         # repo_name = notification_data['repo_name']+
         # print("Validated: "+pusher+", "+repo_url+", "+repo_name)
-        if str(repo_name) == 'robster970/sierra-nginx':
+        if str(repo_name) == 'robster970/sierra-nginx' and str(
+                repo_url) == 'https://hub.docker.com/r/robster970/sierra-nginx':
             os.system('./sierra_docker_update.sh')
         return "OK"
 
