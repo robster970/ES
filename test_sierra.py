@@ -8,6 +8,7 @@ import pandas as pd
 from flask import url_for
 import pytest
 import warnings
+import re
 
 
 # Nasty way of suppressing some calculation warnings.
@@ -253,6 +254,27 @@ def app():
     return test_app
 
 
-def test_web_app_positive_1(client):
+def test_web_app_positive_200_1(client):
     response = client.get(url_for('main'))
     assert response.status_code == 200
+
+
+def test_web_app_positive_furniture_2(client):
+    response = client.get(url_for('main'))
+    body = str(response.data)
+    first_match = 'Sierra Trading'
+    second_match = 'PATD Capital 2018'
+    third_match = 'Checked'
+    fourth_match = 'Required stop loss'
+    assert re.search(first_match, body) and re.search(second_match, body) and re.search(third_match, body) and re.search(fourth_match, body)
+
+
+def test_web_app_positive_data_2(client):
+    response = client.get(url_for('main'))
+    body = str(response.data)
+    first_match = 'ES_Last'
+    second_match = 'VIX_Last'
+    third_match = 'VIX_Ndt'
+    fourth_match = 'VIX_Pdf'
+    assert re.search(first_match, body) and re.search(second_match, body) and re.search(third_match, body) and re.search(fourth_match, body)
+
