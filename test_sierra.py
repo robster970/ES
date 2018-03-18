@@ -253,12 +253,12 @@ def app():
     return test_app
 
 
-def test_web_app_positive_200_1(client):
+def test_web_app_positive_sierra_200_1(client):
     response = client.get(url_for('main'))
     assert response.status_code == 200
 
 
-def test_web_app_positive_furniture_2(client):
+def test_web_app_positive_sierra_furniture_2(client):
     response = client.get(url_for('main'))
     body = str(response.data)
     first_match = 'Sierra Trading'
@@ -270,8 +270,33 @@ def test_web_app_positive_furniture_2(client):
         fourth_match, body)
 
 
-def test_web_app_positive_data_2(client):
+def test_web_app_positive_sierra_data_3(client):
     response = client.get(url_for('main'))
+    body = str(response.data)
+    first_match = 'ES_Last'
+    second_match = 'VIX_Last'
+    third_match = 'VIX_Ndt'
+    fourth_match = 'VIX_Pdf'
+    assert re.search(first_match, body) and re.search(second_match, body) and re.search(third_match,
+                                                                                        body) and re.search(
+        fourth_match, body)
+
+
+def test_web_app_positive_quandl_200_4(client):
+    response = client.get(url_for('main'), query_string='source=Q')
+    assert response.status_code == 200
+
+
+def test_web_app_positive_quandl_furniture_5(client):
+    response = client.get(url_for('main'), query_string='source=Q')
+    body = str(response.data)
+    print(body)
+    first_match = 'source = Q'
+    assert re.search(first_match, body)
+
+
+def test_web_app_positive_quandl_sierra_data_6(client):
+    response = client.get(url_for('main'), query_string='source=Q')
     body = str(response.data)
     first_match = 'ES_Last'
     second_match = 'VIX_Last'
