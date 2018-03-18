@@ -5,6 +5,10 @@ python:
 services:
   - docker
 
+addons:
+  sonarcloud:
+    organization: "robster970-github"
+
 install:
   - pip install -r requirements.txt
 
@@ -13,6 +17,7 @@ before_script:
 
 script:
   - pytest
+  - sonar-scanner
 #  - snyk test
 #  - snyk monitor
 
