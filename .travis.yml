@@ -23,6 +23,10 @@ script:
 #  - snyk test
 #  - snyk monitor
 
+cache:
+  directories:
+    - '$HOME/.sonar/cache'
+
 after_success:
   - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
   - docker build -f Dockerfile -t sierra-nginx . --no-cache=True
