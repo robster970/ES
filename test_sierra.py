@@ -10,7 +10,6 @@ import pytest
 import warnings
 import re
 
-
 # Nasty way of suppressing some calculation warnings.
 # Need to find a better way of doing this.
 warnings.filterwarnings("ignore")
@@ -266,7 +265,9 @@ def test_web_app_positive_furniture_2(client):
     second_match = 'PATD Capital 2018'
     third_match = 'Checked'
     fourth_match = 'Required stop loss'
-    assert re.search(first_match, body) and re.search(second_match, body) and re.search(third_match, body) and re.search(fourth_match, body)
+    assert re.search(first_match, body) and re.search(second_match, body) and re.search(third_match,
+                                                                                        body) and re.search(
+        fourth_match, body)
 
 
 def test_web_app_positive_data_2(client):
@@ -276,5 +277,6 @@ def test_web_app_positive_data_2(client):
     second_match = 'VIX_Last'
     third_match = 'VIX_Ndt'
     fourth_match = 'VIX_Pdf'
-    assert re.search(first_match, body) and re.search(second_match, body) and re.search(third_match, body) and re.search(fourth_match, body)
-
+    assert re.search(first_match, body) and re.search(second_match, body) and re.search(third_match,
+                                                                                        body) and re.search(
+        fourth_match, body)
