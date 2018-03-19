@@ -161,6 +161,8 @@ def main_processor(source):
     print("--------------------------------------------------------------------------------")
     print(es_evaluated_data.iloc[:, [3, 9, 12, 13, 14, 18]].tail(10))
 
+    last_evaluated_date = es_evaluated_data.index[1].date().strftime('%d-%m-%Y')
+
     # Now tidy up the backtest results and evaluated data frames for passing back to web
     es_backtest_results = es_backtest_results.iloc[:, [3, 9, 12, 13, 14, 18, 19]].tail(10)
     es_evaluated_data = es_evaluated_data.iloc[:, [3, 9, 12, 13, 14, 18]].tail(10)
@@ -181,8 +183,9 @@ def main_processor(source):
         while True:
             plt.pause(0.05)
 
-    return {'RunDate': now, 'EntryDecision': es_entry_decision, 'ExitDecision': es_exit_decision,
-            'StopLoss': es_stop_loss, 'EvaluatedData': es_evaluated_data, 'BacktestResult': es_backtest_results}
+    return {'RunDate': now, 'LastEvaluated': last_evaluated_date, 'EntryDecision': es_entry_decision,
+            'ExitDecision': es_exit_decision, 'StopLoss': es_stop_loss, 'EvaluatedData': es_evaluated_data,
+            'BacktestResult': es_backtest_results}
 
 
 plt.show(block=False)

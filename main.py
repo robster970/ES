@@ -22,6 +22,7 @@ def create_app():
 
         # Handle the data required to render in the index.html template
         run_response = response['RunDate']
+        last_response = response['LastEvaluated']
         entry_response = response['EntryDecision']
         exit_response = response['ExitDecision']
         stop_loss_response = response['StopLoss']
@@ -31,14 +32,14 @@ def create_app():
         backtest_results_response = backtest_results_response.to_html(classes='BacktestResult')
 
         # Pass the variables pack into index.html fore rendering
-        return render_template('index.html', source=which, run=run_response, entry=entry_response, exit=exit_response,
-                               stoploss=stop_loss_response, evaluated=evaluated_data_response,
+        return render_template('index.html', source=which, run=run_response, last=last_response, entry=entry_response,
+                               exit=exit_response, stoploss=stop_loss_response, evaluated=evaluated_data_response,
                                backtest=backtest_results_response)
 
     return sierra_app
 
 
-# Start up the webserver
+# Start up the webapp
 if __name__ == "__main__":
     app = create_app()
     app.run(host='0.0.0.0')

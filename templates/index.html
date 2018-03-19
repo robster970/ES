@@ -6,6 +6,7 @@
     <script>
         var source = {{source}}
         var run = {{run}}
+        var last = {{last}}
         var entry = {{entry}}
         var exit = {{exit}}
         var stoploss = {{stoploss}}
@@ -29,15 +30,15 @@
 
     <div class="container">
         <div class="header">
-            <h1 class="text-muted">Sierra Trader</h1>
+            <h1 class="text-muted">Sierra Trader (v1.1)</h1>
         </div>
 
         <div class="jumbotron">
-            <h3><b>Checked:</b> {{run}}</h3>
-            <h3><b>Source:</b> {{source}}</h3>
-            <h3><b>Entry analysis:</b> {{entry}}</h3>
-            <h3><b>Exit analysis:</b> {{exit}}</h3>
-            <h3><b>Required stop loss:</b> {{stoploss}}</h3>
+            <h3><strong>Checked:</strong> {{run}}</h3>
+            <h3><strong>Last evaluated trading day:</strong> {{last}}, from source: {{source}}</h3>
+            <h3><strong>Entry analysis:</strong> {{entry}}</h3>
+            <h3><strong>Exit analysis:</strong> {{exit}}</h3>
+            <h3><strong>Required stop loss:</strong> {{stoploss}}</h3>
 
         </div>
 
