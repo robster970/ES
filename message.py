@@ -25,5 +25,5 @@ logger.info(log_message)
 # Create and send a new message
 new_message = sm.Messaging(response)
 message_response = new_message.ses_aws()
-log_message = "New message created with response: " + message_response
+log_message = "New message handled: " + message_response
 logger.info(log_message)
