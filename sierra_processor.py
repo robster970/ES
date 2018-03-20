@@ -153,13 +153,13 @@ def main_processor(source):
         log_message = "No output files written for source and backtest files"
         logger.info(log_message)
 
-    print("--------------------------------------------------------------------------------")
-    print(es_backtest_results.iloc[:, [3, 9, 12, 13, 14, 18, 19]].tail(10))
-    print("--------------------------------------------------------------------------------")
-    print("Required stop loss: " + str(es_stop_loss))
-    print("Evaluated data in backtest")
-    print("--------------------------------------------------------------------------------")
-    print(es_evaluated_data.iloc[:, [3, 9, 12, 13, 14, 18]].tail(10))
+    # print("--------------------------------------------------------------------------------")
+    # print(es_backtest_results.iloc[:, [3, 9, 12, 13, 14, 18, 19]].tail(10))
+    # print("--------------------------------------------------------------------------------")
+    # print("Required stop loss: " + str(es_stop_loss))
+    # print("Evaluated data in backtest")
+    # print("--------------------------------------------------------------------------------")
+    # print(es_evaluated_data.iloc[:, [3, 9, 12, 13, 14, 18]].tail(10))
 
     last_evaluated_date = es_evaluated_data.index[1].date().strftime('%d-%m-%Y')
 
