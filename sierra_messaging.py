@@ -44,9 +44,8 @@ class Messaging:
              </body>
              </html>
              """
-        self._text = ("Amazon SES Test (Python)\r\n"
-                      "This email was sent with Amazon SES using the "
-                      "AWS SDK for Python (Boto)."
+        self._text = ("Unable to view html\r\n"
+                      "Go to http://taplow.io"
                       )
         self._format = 'html'
         self.charset = "UTF-8"
@@ -71,7 +70,7 @@ class Messaging:
                     'Body': {
                         'Html': {
                             'Charset': self.charset,
-                            'Data': self._html_1 +self.evaluated_data_response +self._html_2 +self.backtest_results_response,
+                            'Data': self._html_1 + self.evaluated_data_response + self._html_2 + self.backtest_results_response,
                         },
                         'Text': {
                             'Charset': self.charset,
@@ -83,9 +82,7 @@ class Messaging:
                         'Data': self.subject,
                     },
                 },
-                Source=self.source,
-                # If you are not using a configuration set, comment or delete the
-                # following line
+                Source=self.source
             )
         # Log an error if something goes wrong.
         except ClientError as e:
