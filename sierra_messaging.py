@@ -3,8 +3,6 @@ import boto3
 from botocore.exceptions import ClientError
 
 AWS_REGION = 'eu-west-1'
-AWS_ACCESS_KEY = 'AKIAI5MVLWBVAM2OTXXQ'
-AWS_SECRET_KEY = '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'
 
 
 # Define main Importer class
@@ -50,12 +48,13 @@ class Messaging:
         self._format = 'html'
         self.charset = "UTF-8"
 
+        self.CONFIGURATION_SET = "sierra-mail"
+
         # Create new logging instance
         self.logger = logging.getLogger(__name__)
 
     def ses_aws(self):
-        client = boto3.client('ses', region_name=AWS_REGION, aws_access_key_id=AWS_ACCESS_KEY,
-                              aws_secret_access_key=AWS_SECRET_KEY)
+        client = boto3.client('ses', region_name=AWS_REGION)
 
         # Try to send the email.
         try:
@@ -82,11 +81,12 @@ class Messaging:
                         'Data': self.subject,
                     },
                 },
-                Source=self.source
+                Source=self.source,
+                ConfigurationSetName=self.CONFIGURATION_SET,
             )
         # Log an error if something goes wrong.
         except ClientError as e:
-            log_message = e.response['Error']['Message']
+            log_message = "Error: " + e.response['Error']['Message']
         else:
             log_message = "Email Message ID: " + response['ResponseMetadata']['RequestId']
         return log_message
