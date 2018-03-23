@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request
-import sierra_processor
+from apscheduler.schedulers.background import BackgroundScheduler
+import sierra_processor as sp
+import sierra_messaging as sm
 import logging
 
 
@@ -7,6 +9,34 @@ import logging
 # Important that filename is set to main.py also
 def create_app():
     sierra_app = Flask(__name__)
+
+    # Create a message scheduler to run in the background and start it
+    message_scheduler = BackgroundScheduler()
+    message_scheduler.start()
+
+    # Create the notification message function
+    def message_notification():
+        # Set the data source - this needs to be done in code
+        # as there is currently no way of setting this in an accessible way
+        which = 'S'
+
+        # Run main sierra_processor to get data for message
+        response = sp.main_processor(which)
+
+        # Start logger
+        logger = logging.getLogger('main_messenger')
+
+        # Log for starting main messaging processing
+        log_message = "Scheduled messaging service started"
+        logger.info(log_message)
+
+        # Create and send a new message
+        new_message = sm.Messaging(response)
+        message_response = new_message.ses_aws()
+        log_message = "Message service response: " + message_response
+        logger.info(log_message)
+
+    message_scheduler.add_job(message_notification, 'cron', day_of_week='mon-fri', hour=12, minute=40)
 
     @sierra_app.route("/")
     def main():
@@ -20,13 +50,9 @@ def create_app():
             if which not in ('S', 'Q'):
                 which = "S"
 
-        response = sierra_processor.main_processor(which)
-
-        logger = logging.getLogger('main_webserver')
+        response = sp.main_processor(which)
 
         # Log for start main processing
-        log_message = "Web application server rendering response"
-        logger.info(log_message)
 
         # Handle the data required to render in the index.html template
         run_response = response['RunDate']
