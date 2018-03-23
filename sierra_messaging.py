@@ -11,6 +11,9 @@ class Messaging:
 
     def __init__(self, response):
 
+        # Create new logging instance
+        self.logger = logging.getLogger(__name__)
+
         self.run_response = response['RunDate']
         self.last_response = response['LastEvaluated']
         self.entry_response = response['EntryDecision']
@@ -20,6 +23,13 @@ class Messaging:
         self.backtest_results_response = response['BacktestResult']
         self.evaluated_data_response = self.evaluated_data_response.to_html(classes='EvaluatedData')
         self.backtest_results_response = self.backtest_results_response.to_html(classes='BacktestResult')
+
+        # Checks to ensure parameters passed in are valid
+        if isinstance(response, dict):
+            log_message = "Parsed response is a valid dictionary"
+        else:
+            raise InvalidMessagingException('Invalid dictionary: {}'.format(response))
+        self.logger.debug(log_message)
 
         self.to = 'robster970@gmail.com'
         self.source = self.to
@@ -50,11 +60,11 @@ class Messaging:
 
         self.CONFIGURATION_SET = "sierra-mail"
 
-        # Create new logging instance
-        self.logger = logging.getLogger(__name__)
-
     def ses_aws(self):
         client = boto3.client('ses', region_name=AWS_REGION)
+
+        log_message="SES Msg client created, sending mail"
+        self.logger.debug(log_message)
 
         # Try to send the email.
         try:
@@ -90,3 +100,7 @@ class Messaging:
         else:
             log_message = "Email Message ID: " + response['ResponseMetadata']['RequestId']
         return log_message
+
+# Define class for exception handling of incorrect data frame attributes
+class InvalidMessagingException(Exception):
+    pass
