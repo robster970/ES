@@ -3,12 +3,14 @@ from sierra_calculator import Calculator, InvalidDataAttributes
 from sierra_processor import main_processor, MainSierraException
 from sierra_trade import Trading, InvalidTradeAttributes
 from sierra_backtest import Backtest, InvalidBacktestAttributes
+from sierra_messaging import Messaging, InvalidMessagingException
 from main import create_app
 import pandas as pd
 from flask import url_for
 import pytest
 import warnings
 import re
+import time
 
 # Nasty way of suppressing some calculation warnings.
 # Need to find a better way of doing this.
@@ -241,6 +243,79 @@ def test_backtest_data_attributes_negative():
     data_frame = [1, 2, 3, 4, 5]
     with pytest.raises(InvalidBacktestAttributes):
         Backtest(data_frame).es_vix_long_test()
+
+
+##############################
+# sierra_backtest tests      #
+##############################
+@pytest.fixture()
+def response_dictionary_good():
+    column_id = "TEST"
+    data = {'date': ['2014-05-01', '2014-05-02', '2014-05-03',
+                     '2014-05-04', '2014-05-05', '2014-05-06',
+                     '2014-05-07', '2014-05-08', '2014-05-09',
+                     '2014-05-10'],
+            column_id + '_High': [1934, 1925, 1926, 1915, 1915, 1914, 1926, 1925, 1962, 1941],
+            column_id + '_Low': [1920, 1910, 1905, 1900, 1890, 1880, 1905, 1903, 1930, 1920]}
+    data_frame = pd.DataFrame(data, columns=['date', column_id + '_High', column_id + '_Low'])
+
+    now = time.strftime("%H:%M:%S %d-%m-%Y", time.gmtime())
+    last_evaluated_date = time.strftime("%d-%m-%Y", time.gmtime())
+    es_entry_decision = 'NO ACTION REQUIRED: No entry conditions found'
+    es_exit_decision = 'NO ACTION REQUIRED: No entry conditions found'
+    es_stop_loss = '0'
+    es_evaluated_data = data_frame
+    es_backtest_results = data_frame
+    return {'RunDate': now, 'LastEvaluated': last_evaluated_date, 'EntryDecision': es_entry_decision,
+            'ExitDecision': es_exit_decision, 'StopLoss': es_stop_loss, 'EvaluatedData': es_evaluated_data,
+            'BacktestResult': es_backtest_results}
+
+
+@pytest.fixture()
+def response_dictionary_bad():
+    column_id = "TEST"
+    data = {'date': ['2014-05-01', '2014-05-02', '2014-05-03',
+                     '2014-05-04', '2014-05-05', '2014-05-06',
+                     '2014-05-07', '2014-05-08', '2014-05-09',
+                     '2014-05-10'],
+            column_id + '_High': [1934, 1925, 1926, 1915, 1915, 1914, 1926, 1925, 1962, 1941],
+            column_id + '_Low': [1920, 1910, 1905, 1900, 1890, 1880, 1905, 1903, 1930, 1920]}
+    data_frame = pd.DataFrame(data, columns=['date', column_id + '_High', column_id + '_Low'])
+
+    now = time.strftime("%H:%M:%S %d-%m-%Y", time.gmtime())
+    last_evaluated_date = time.strftime("%d-%m-%Y", time.gmtime())
+    es_entry_decision = 'NO ACTION REQUIRED: No entry conditions found'
+    es_exit_decision = 'NO ACTION REQUIRED: No entry conditions found'
+    es_stop_loss = '0'
+    es_evaluated_data = 'blah'
+    es_backtest_results = data_frame
+    return {'RunDate': now, 'LastEvaluated': last_evaluated_date, 'EntryDecision': es_entry_decision,
+            'ExitDecision': es_exit_decision, 'StopLoss': es_stop_loss, 'EvaluatedData': es_evaluated_data,
+            'BacktestResult': es_backtest_results}
+
+
+def test_messaging_data_attributes_positive():
+    try:
+        response = response_dictionary_good()
+        assert Messaging(response)
+    except InvalidMessagingException:
+        print("Invalid Messaging Exception invoked correctly")
+
+
+def test_messaging_data_attributes_negative_1():
+    with pytest.raises(AttributeError):
+        response = response_dictionary_bad()
+        Messaging(response)
+
+
+def test_messaging_call_method_positive():
+    try:
+        response = response_dictionary_good()
+        messaging_response = Messaging(response).ses_aws()
+        print(messaging_response)
+        assert re.search('Email Message ID:', messaging_response)
+    except InvalidMessagingException:
+        print("Invalid Messaging Exception invoked correctly")
 
 
 ##########################
