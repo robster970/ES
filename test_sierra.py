@@ -26,14 +26,14 @@ warnings.filterwarnings("ignore")
     "A"
 
 ])
-def test_processor_attributes_positive_combinations(source):
+def test_processor_attributes_positive_combinations_1(source):
     try:
         main_processor(source)
     except MainSierraException:
         print("MainSierraException invoked correctly")
 
 
-def test_processor_attributes_negative_1():
+def test_processor_attributes_negative_2():
     with pytest.raises(MainSierraException):
         source = "A"
         main_processor(source)
@@ -57,7 +57,7 @@ def test_importer_sierra_file_attributes_positive_1():
     (".sierra_data/", "ESM18.dly_BarData.t", "TEST"),
 
 ])
-def test_importer_sierra_file_attributes_negative_combinations(working_directory, file_name, column_id):
+def test_importer_sierra_file_attributes_negative_combinations_2(working_directory, file_name, column_id):
     with pytest.raises(InvalidFileAttributes):
         Importer().get_data_sierra(working_directory, file_name, column_id)
 
@@ -67,7 +67,7 @@ def test_importer_sierra_file_attributes_negative_combinations(working_directory
     ("CHRIS/CME_SP1", "ES"),
 
 ])
-def test_importer_quandl_api_attributes_positive_combinations(handle, column_id):
+def test_importer_quandl_api_attributes_positive_combinations_3(handle, column_id):
     assert Importer().get_data_quandl(handle, column_id) is not None
 
 
@@ -77,7 +77,7 @@ def test_importer_quandl_api_attributes_positive_combinations(handle, column_id)
     ("CHRIS/CBOE_VX1", "TEST"),
 
 ])
-def test_importer_quandl_api_attributes_negative_combinations(handle, column_id):
+def test_importer_quandl_api_attributes_negative_combinations_4(handle, column_id):
     with pytest.raises(InvalidAPIAttributes):
         Importer().get_data_quandl(handle, column_id)
 
@@ -102,32 +102,32 @@ def vix_test_object():
     return data_frame
 
 
-def test_calculator_data_attributes_positive():
+def test_calculator_data_attributes_positive_1():
     column_id = "TEST"
     assert Calculator(vix_test_object(), column_id)
 
 
-def test_calculator_data_attributes_negative_1():
+def test_calculator_data_attributes_negative_2():
     column_id = "TEST"
     data_frame = [1, 2, 3, 4, 5]
     with pytest.raises(InvalidDataAttributes):
         Calculator(data_frame, column_id)
 
 
-def test_calculator_data_attributes_negative_2():
+def test_calculator_data_attributes_negative_3():
     column_id = 123
     with pytest.raises(InvalidDataAttributes):
         Calculator(vix_test_object(), column_id)
 
 
-def test_calculator_calculate_vix_values():
+def test_calculator_calculate_vix_values_4():
     rolling_period = 3
     column_id = "TEST"
     test_object = Calculator(vix_test_object(), column_id)
     assert test_object.calculate_values_vix(rolling_period) is not None
 
 
-def test_calculator_calculate_vix_values_negative_1():
+def test_calculator_calculate_vix_values_negative_5():
     rolling_period = "Yes"
     column_id = "TEST"
     test_object = Calculator(vix_test_object(), column_id)
@@ -152,12 +152,12 @@ def es_test_object():
     return Calculator(data_frame, column_id)
 
 
-def test_calculator_calculate_es_values():
+def test_calculator_calculate_es_values_1():
     rolling_period = 3
     assert es_test_object().calculate_values_es(rolling_period) is not None
 
 
-def test_calculator_calculate_es_values_negative_1():
+def test_calculator_calculate_es_values_negative_2():
     rolling_period = "Yes"
     with pytest.raises(InvalidDataAttributes):
         es_test_object().calculate_values_es(rolling_period)
@@ -185,11 +185,11 @@ def combined_test_object():
     return combined
 
 
-def test_trade_data_attributes_positive():
+def test_trade_data_attributes_positive_1():
     assert Trading(combined_test_object()) is not None
 
 
-def test_trade_data_attributes_negative_1():
+def test_trade_data_attributes_negative_2():
     bad_dataframe = [1, 3, 5, 7, 9]
     with pytest.raises(InvalidTradeAttributes):
         Trading(bad_dataframe)
@@ -202,7 +202,7 @@ def test_trade_data_attributes_negative_1():
     3.1415,
 
 ])
-def test_trade_processor_type_positive_combinations(status):
+def test_trade_processor_type_positive_combinations_3(status):
     try:
         f = combined_test_object()
         g = Trading(f)
@@ -211,21 +211,21 @@ def test_trade_processor_type_positive_combinations(status):
         print("InvalidTradeAttributes exception invoked")
 
 
-def test_trade_processor_type_negative_1():
+def test_trade_processor_type_negative_4():
     f = combined_test_object()
     g = Trading(f)
     with pytest.raises(InvalidTradeAttributes):
         g.es_vix_long('Brexit')
 
 
-def test_trade_processor_get_data_positive():
+def test_trade_processor_get_data_positive_5():
     f = combined_test_object()
     g = Trading(f)
     g.es_vix_long("entry")
     assert g.get_evaluated_data() is not None
 
 
-def test_trade_processor_get_stop_positive():
+def test_trade_processor_get_stop_positive_6():
     f = combined_test_object()
     g = Trading(f)
     g.es_vix_long("entry")
@@ -235,19 +235,19 @@ def test_trade_processor_get_stop_positive():
 ##############################
 # sierra_backtest tests      #
 ##############################
-def test_backtest_data_attributes_positive():
+def test_backtest_data_attributes_positive_1():
     assert Backtest(combined_test_object()).es_vix_long_test() is not None
 
 
-def test_backtest_data_attributes_negative():
+def test_backtest_data_attributes_negative_2():
     data_frame = [1, 2, 3, 4, 5]
     with pytest.raises(InvalidBacktestAttributes):
         Backtest(data_frame).es_vix_long_test()
 
 
-##############################
-# sierra_backtest tests      #
-##############################
+###############################
+# sierra_messaging tests      #
+###############################
 @pytest.fixture()
 def response_dictionary_good():
     column_id = "TEST"
@@ -294,7 +294,7 @@ def response_dictionary_bad():
             'BacktestResult': es_backtest_results}
 
 
-def test_messaging_data_attributes_positive():
+def test_messaging_data_attributes_positive_1():
     try:
         response = response_dictionary_good()
         assert Messaging(response)
@@ -302,13 +302,13 @@ def test_messaging_data_attributes_positive():
         print("Invalid Messaging Exception invoked correctly")
 
 
-def test_messaging_data_attributes_negative_1():
+def test_messaging_data_attributes_negative_2():
     with pytest.raises(AttributeError):
         response = response_dictionary_bad()
         Messaging(response)
 
 
-def test_messaging_call_method_positive():
+def test_messaging_call_method_positive_3():
     try:
         response = response_dictionary_good()
         messaging_response = Messaging(response).ses_aws()
@@ -372,6 +372,18 @@ def test_web_app_positive_quandl_furniture_5(client):
 
 def test_web_app_positive_quandl_sierra_data_6(client):
     response = client.get(url_for('main'), query_string='source=Q')
+    body = str(response.data)
+    first_match = 'ES_Last'
+    second_match = 'VIX_Last'
+    third_match = 'VIX_Ndt'
+    fourth_match = 'VIX_Pdf'
+    assert re.search(first_match, body) and re.search(second_match, body) and re.search(third_match,
+                                                                                        body) and re.search(
+        fourth_match, body)
+
+
+def test_web_app_negative_source_requested_7(client):
+    response = client.get(url_for('main'), query_string='source=A')
     body = str(response.data)
     first_match = 'ES_Last'
     second_match = 'VIX_Last'
