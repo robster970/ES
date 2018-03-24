@@ -20,6 +20,7 @@ addons:
     organization: "robster970-github"
 
 before_install:
+  - pip install pytest pytest-cov
   - pip install coveralls
 
 install:
@@ -31,7 +32,7 @@ before_script:
 script:
   - pytest
   - sonar-scanner
-  - snyk test
+  # - snyk test
 
 cache:
   directories:
@@ -46,7 +47,7 @@ after_success:
   - docker run -p 127.0.0.1:80:5000 -d -t $DOCKER_USERNAME/sierra-nginx
   - docker ps -a
   - curl -v 127.0.0.1:80/source=S
-  - snyk monitor
+  # - snyk monitor
   - radon cc sierra*.py -as
   - coveralls
 
