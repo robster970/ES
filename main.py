@@ -4,6 +4,8 @@ import sierra_processor as sp
 import sierra_messaging as sm
 import logging
 
+host_address = '0.0.0.0'
+
 
 # Set webapp name to app so it can be used by NGINX docker image
 # Important that filename is set to main.py also
@@ -84,4 +86,4 @@ def create_app():
 # Start up the webapp
 if __name__ == "__main__":
     app = create_app()
-    app.run(host='0.0.0.0')
+    app.run(host=host_address)
