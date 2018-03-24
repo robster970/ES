@@ -30,7 +30,7 @@ before_script:
   - npm install -g snyk
 
 script:
-  - pytest --cov-config .coveragerc --cov-report term-missing --cov=. test_sierra.py --verbose
+  - pytest --cov-config .coveragerc --cov-report xml --cov=. test_sierra.py --verbose
   - sonar-scanner
   - snyk test
 
