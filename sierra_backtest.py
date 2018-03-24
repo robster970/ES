@@ -28,30 +28,18 @@ class Backtest:
         backtest_entry_1 = self.combined[
             (self.combined['VIX_Ndt'] > 0.841) & (self.combined['VIX_Pdf'] > 0) & (self.combined['VIX_Pdf'] < 0.03)]
         backtest_entry_1['Action'] = "Entry_1"
-        # print(backtest_entry_1.iloc[:, [3, 9, 12, 13, 14, 15, 18, 19]].tail(5))
-        # print()
-
-        # print("Entry(2) Criteria-------------------------------------------------------------------")
         backtest_entry_2 = self.combined[
             (self.combined['VIX_NdtY'] > 0.841) & (self.combined['VIX_PdfY'] > -0.03) & (
                         self.combined['VIX_PdfY'] < 0.03) & (
                     self.combined['VIX_Pdf'] < 0)]
         backtest_entry_2['Action'] = "Entry_2"
-        # print(backtest_entry_2.iloc[:, [3, 9, 12, 13, 14, 15, 18, 19]].tail(5))
-        # print()
-
-        # print("Exit(1) Criteria--------------------------------------------------------------------")
         backtest_exit_1 = self.combined[
             (self.combined['VIX_Ndt'] < 0.159) & (self.combined['VIX_Pdf'] > -0.03) & (self.combined['VIX_Pdf'] < 0.03)]
         backtest_exit_1['Action'] = "Exit_1"
-        # print(backtest_exit_1.iloc[:, [3, 9, 12, 13, 14, 15, 18, 19]].tail(5))
-        # print()
 
         # Combine the entry and exit decisions and sort by the time-series index
         backtest_result = pd.concat([backtest_entry_1, backtest_entry_2, backtest_exit_1], axis=0)
         backtest_result.sort_index(inplace=True)
-
-        # print(backtest_result.iloc[:, [3, 9, 12, 13, 14, 18, 19]].tail(10))
 
         log_message = "Backtest completed and results returned"
         self.logger.debug(log_message)
