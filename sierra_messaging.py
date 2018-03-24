@@ -63,7 +63,7 @@ class Messaging:
     def ses_aws(self):
         client = boto3.client('ses', region_name=AWS_REGION)
 
-        log_message="SES Msg client created, sending mail"
+        log_message = "SES Msg client created, sending mail"
         self.logger.debug(log_message)
 
         # Try to send the email.
