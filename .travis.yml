@@ -9,8 +9,8 @@ branches:
   only:
   - master
 
-git:
-  depth: 2
+#git:
+#  depth: 2
 
 services:
   - docker
@@ -30,7 +30,7 @@ before_script:
   - npm install -g snyk
 
 script:
-  - pytest --cov-config .coveragerc --cov=. test_sierra.py --verbose
+  - pytest --cov-config .coveragerc --cov-report term-missing --cov=. test_sierra.py --verbose
   - sonar-scanner
   - snyk test
 
