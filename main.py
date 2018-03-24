@@ -71,12 +71,12 @@ def create_app():
                                exit=exit_response, stoploss=stop_loss_response, evaluated=evaluated_data_response,
                                backtest=backtest_results_response)
 
-    @sierra_app.route("/scheduler")
-    def scheduler():
-        which="S"
-        response = sp.main_processor(which)
-        sm.Messaging(response).ses_aws()
-        return "Message was sent! Check your mail."
+    # @sierra_app.route("/scheduler")
+    # def scheduler():
+    #     which="S"
+    #     response = sp.main_processor(which)
+    #     sm.Messaging(response).ses_aws()
+    #     return "Message was sent! Check your mail."
 
 
     return sierra_app
