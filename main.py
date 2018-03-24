@@ -37,7 +37,7 @@ def create_app():
         logger.info(log_message)
 
     # Set up the scheduler to use the messaging function using a cron like schedule
-    message_scheduler.add_job(message_notification, 'cron', day_of_week='mon-fri', hour=22, minute=45)
+    message_scheduler.add_job(message_notification, 'cron', day_of_week='mon-fri', hour=13, minute=15)
 
     # Define URLs and associated processing
     @sierra_app.route("/")
