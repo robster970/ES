@@ -78,7 +78,6 @@ def create_app():
     #     sm.Messaging(response).ses_aws()
     #     return "Message was sent! Check your mail."
 
-
     return sierra_app
 
 
