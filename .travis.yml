@@ -19,9 +19,6 @@ addons:
   sonarcloud:
     organization: "robster970-github"
 
-before_install:
-  - pip install pytest pytest-cov
-  - pip install coveralls
 
 install:
   - pip install -r requirements.txt
@@ -49,5 +46,4 @@ after_success:
   - curl -v 127.0.0.1:80/source=S
   # - snyk monitor
   - radon cc sierra*.py -as
-  - coveralls
 
