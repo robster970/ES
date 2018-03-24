@@ -1,0 +1,5 @@
+[run]
+omit = .output/*
+       .sierra_data/*
+       venv/*
+       test_sierra.py
