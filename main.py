@@ -76,7 +76,7 @@ def create_app():
         which="S"
         response = sp.main_processor(which)
         sm.Messaging(response).ses_aws()
-        return "Message was sent!"
+        return "Message was sent! Check your mail."
 
 
     return sierra_app
