@@ -39,6 +39,10 @@ cache:
     - '$HOME/.sonar/cache'
 
 after_success:
+  - coveralls
+  - snyk monitor
+  - radon cc sierra*.py -as
+  - rm coverage.xml
   - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
   - docker build -f Dockerfile -t sierra-nginx . --no-cache=True
   - docker images
@@ -47,7 +51,4 @@ after_success:
   - docker run -p 127.0.0.1:80:5000 -d -t $DOCKER_USERNAME/sierra-nginx
   - docker ps -a
   - curl -v 127.0.0.1:80/source=S
-  - snyk monitor
-  - radon cc sierra*.py -as
-  - coveralls
 
