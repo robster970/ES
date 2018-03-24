@@ -9,8 +9,8 @@ branches:
   only:
   - master
 
-#git:
-#  depth: 2
+git:
+  depth: 2
 
 services:
   - docker
