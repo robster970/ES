@@ -37,7 +37,7 @@ def create_app():
         logger.info(log_message)
 
     # Set up the scheduler to use the messaging function using a cron like schedule
-    message_scheduler.add_job(message_notification, 'cron', day_of_week='mon-fri', hour=13, minute=15)
+    message_scheduler.add_job(message_notification, 'cron', day_of_week='mon-fri', hour=22, minute=45)
 
     # Define URLs and associated processing
     @sierra_app.route("/")
@@ -70,6 +70,14 @@ def create_app():
         return render_template('index.html', source=which, run=run_response, last=last_response, entry=entry_response,
                                exit=exit_response, stoploss=stop_loss_response, evaluated=evaluated_data_response,
                                backtest=backtest_results_response)
+
+    @sierra_app.route("/scheduler")
+    def scheduler():
+        which="S"
+        response = sp.main_processor(which)
+        sm.Messaging(response).ses_aws()
+        return "Message was sent!"
+
 
     return sierra_app
 
