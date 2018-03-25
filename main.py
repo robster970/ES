@@ -3,6 +3,14 @@ from apscheduler.schedulers.background import BackgroundScheduler
 import sierra_processor as sp
 import sierra_messaging as sm
 import logging
+import yaml
+
+
+# Load basic config for Flask application
+config = yaml.safe_load(open("webserver_config.yml"))
+default_host = config['default_host']
+default_port = config['default_port']
+default_debug = config['default_debug']
 
 
 # Set webapp name to app so it can be used by NGINX docker image
@@ -84,4 +92,4 @@ def create_app():
 # Start up the webapp
 if __name__ == "__main__":
     app = create_app()
-    app.run(host='0.0.0.0')
+    app.run(host=default_host, debug=default_debug, port=default_port)
