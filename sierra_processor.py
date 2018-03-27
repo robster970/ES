@@ -18,7 +18,8 @@ class MainSierraException(Exception):
 
 def main_processor(source):
     # Timestamp execution
-    now = time.strftime("%H:%M:%S %d-%m-%Y", time.gmtime())
+    time.tzset()
+    now = time.strftime("%H:%M:%S %d-%m-%Y")
 
     # Copy most recent sierra files to .sierra_data directory
     os.system('./sierra_copy_nginx.sh')
