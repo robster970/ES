@@ -5,14 +5,17 @@ from botocore.exceptions import ClientError
 AWS_REGION = 'eu-west-1'
 
 
-# Define main Importer class
+# Define main Messaging class
 class Messaging:
     """Class to send message notifications post trade decision calculations"""
 
-    def __init__(self, response):
+    def __init__(self, response, source):
 
         # Create new logging instance
         self.logger = logging.getLogger(__name__)
+
+        self.to = 'robster970@gmail.com'
+        self.source = source
 
         self.run_response = response['RunDate']
         self.last_response = response['LastEvaluated']
@@ -31,8 +34,6 @@ class Messaging:
             raise InvalidMessagingException('Invalid dictionary: {}'.format(response))
         self.logger.debug(log_message)
 
-        self.to = 'robster970@gmail.com'
-        self.source = self.to
         self.subject = 'Trade evaluation update: ' + self.run_response
         self._html_1 = """<html>
              <head></head>
@@ -100,6 +101,7 @@ class Messaging:
         else:
             log_message = "Email Message ID: " + response['ResponseMetadata']['RequestId']
         return log_message
+
 
 # Define class for exception handling of incorrect data frame attributes
 class InvalidMessagingException(Exception):

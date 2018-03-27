@@ -4,7 +4,7 @@ from sierra_processor import main_processor, MainSierraException
 from sierra_trade import Trading, InvalidTradeAttributes
 from sierra_backtest import Backtest, InvalidBacktestAttributes
 from sierra_messaging import Messaging, InvalidMessagingException
-from main import create_app
+from main import create_app, message_notification
 import pandas as pd
 from flask import url_for
 import pytest
@@ -20,23 +20,24 @@ warnings.filterwarnings("ignore")
 ##########################
 # sierra_processor tests #
 ##########################
-@pytest.mark.parametrize("source", [
-    "Q",
-    "S",
-    "A"
+@pytest.mark.parametrize("source, write_files", [
+    ("Q", "N"),
+    ("S", "Y"),
+    ("A", "N")
 
 ])
-def test_processor_attributes_positive_combinations_1(source):
+def test_processor_attributes_positive_combinations_1(source, write_files):
     try:
-        main_processor(source)
+        main_processor(source, write_files)
     except MainSierraException:
         print("MainSierraException invoked correctly")
 
 
 def test_processor_attributes_negative_2():
     with pytest.raises(MainSierraException):
+        write_files = 'N'
         source = "A"
-        main_processor(source)
+        main_processor(source, write_files)
 
 
 #########################
@@ -296,26 +297,41 @@ def response_dictionary_bad():
 
 def test_messaging_data_attributes_positive_1():
     try:
+        source = 'blah'
         response = response_dictionary_good()
-        assert Messaging(response)
+        assert Messaging(response, source)
     except InvalidMessagingException:
-        print("Invalid Messaging Exception invoked correctly")
+        print("InvalidMessagingException exception invoked")
 
 
 def test_messaging_data_attributes_negative_2():
+    source = 'blah'
     with pytest.raises(AttributeError):
         response = response_dictionary_bad()
-        Messaging(response)
+        Messaging(response, source)
 
 
-def test_messaging_call_method_positive_3():
-    try:
-        response = response_dictionary_good()
-        messaging_response = Messaging(response).ses_aws()
-        print(messaging_response)
-        assert re.search('Email Message ID:', messaging_response)
-    except InvalidMessagingException:
-        print("Invalid Messaging Exception invoked correctly")
+def test_messaging_data_attributes_negative_3():
+    source = 'blah'
+    with pytest.raises(TypeError):
+        response = [1, 2, 4, 5, 7]
+        Messaging(response, source)
+
+
+def test_messaging_call_method_positive_4():
+    source = 'robster970@gmail.com'
+    response = response_dictionary_good()
+    messaging_response = Messaging(response, source).ses_aws()
+    print(messaging_response)
+    assert re.search('Email Message ID:', messaging_response)
+
+
+def test_messaging_data_method_negative_5():
+    source = 'zoe.hatch@gmail.com'
+    response = response_dictionary_good()
+    messaging_response = Messaging(response, source).ses_aws()
+    print(messaging_response)
+    assert re.search('Email address is not verified.', messaging_response)
 
 
 ##########################
@@ -392,3 +408,8 @@ def test_web_app_negative_source_requested_7(client):
     assert re.search(first_match, body) and re.search(second_match, body) and re.search(third_match,
                                                                                         body) and re.search(
         fourth_match, body)
+
+
+def test_web_app_positive_email_sent():
+    response = message_notification()
+    assert response == "Email notification sent"

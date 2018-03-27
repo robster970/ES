@@ -16,7 +16,7 @@ class MainSierraException(Exception):
     pass
 
 
-def main_processor(source):
+def main_processor(source, write_files):
     # Timestamp execution
     time.tzset()
     now = time.strftime("%H:%M:%S %d-%m-%Y")
@@ -28,7 +28,6 @@ def main_processor(source):
     plot_output = "N"
     rolling_period = 10
     output_directory_location = '.output/'
-    write_files = "N"
 
     # Pickup logging configuration and create logger for Processor
     logging.config.fileConfig('logging.conf')

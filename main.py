@@ -13,6 +13,32 @@ default_port = config['default_port']
 default_debug = config['default_debug']
 
 
+# Create the notification function used by the scheduler
+def message_notification():
+    # Set the data source - this needs to be done in code, local scope applies
+    # as there is currently no way of setting this in an accessible way
+    which = 'S'
+    source = 'robster970@gmail.com'
+    write_files = 'N'
+
+    # Run main sierra_processor to get data for message
+    response = sp.main_processor(which, write_files)
+
+    # Start logger
+    logger = logging.getLogger('main_messenger')
+
+    # Log for starting main messaging processing
+    log_message = "Scheduled messaging service started"
+    logger.info(log_message)
+
+    # Create and send a new message
+    message_response = sm.Messaging(response, source).ses_aws()
+    log_message = "Message service response: " + message_response
+    logger.info(log_message)
+
+    return "Email notification sent"
+
+
 # Set webapp name to app so it can be used by NGINX docker image
 # Important that filename is set to main.py also
 def create_app():
@@ -23,29 +49,8 @@ def create_app():
     message_scheduler = BackgroundScheduler()
     message_scheduler.start()
 
-    # Create the notification function used by the scheduler
-    def message_notification():
-        # Set the data source - this needs to be done in code, local scope applies
-        # as there is currently no way of setting this in an accessible way
-        which = 'S'
-
-        # Run main sierra_processor to get data for message
-        response = sp.main_processor(which)
-
-        # Start logger
-        logger = logging.getLogger('main_messenger')
-
-        # Log for starting main messaging processing
-        log_message = "Scheduled messaging service started"
-        logger.info(log_message)
-
-        # Create and send a new message
-        message_response = sm.Messaging(response).ses_aws()
-        log_message = "Message service response: " + message_response
-        logger.info(log_message)
-
     # Set up the scheduler to use the messaging function using a cron like schedule
-    message_scheduler.add_job(message_notification, 'cron', day_of_week='mon-fri', hour=22, minute=45)
+    message_scheduler.add_job(message_notification, 'cron', day_of_week='mon-fri', hour=18, minute=51)
 
     # Define URLs and associated processing
     @sierra_app.route("/")
@@ -55,13 +60,14 @@ def create_app():
         # Validate whether a URL parameter has been passed in using 'source'
         # Set the default to Sierra if nothing passed or it is invalid
         which = "S"
+        write_files = 'N'
         if 'source' in request.args:
             which = request.args['source']
             if which not in ('S', 'Q'):
                 which = "S"
 
         # Run the processor
-        response = sp.main_processor(which)
+        response = sp.main_processor(which, write_files)
 
         # Handle the data required to render in index.html template
         run_response = response['RunDate']
@@ -81,9 +87,10 @@ def create_app():
 
     # @sierra_app.route("/scheduler")
     # def scheduler():
-    #     which="S"
-    #     response = sp.main_processor(which)
-    #     sm.Messaging(response).ses_aws()
+    #     which = "S"
+    #     write_files = "N"
+    #     response = sp.main_processor(which, write_files)
+    #     sm.Messaging(response, "robster970@gmail.com").ses_aws()
     #     return "Message was sent! Check your mail."
 
     return sierra_app
