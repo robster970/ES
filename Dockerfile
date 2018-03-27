@@ -2,6 +2,8 @@ FROM tiangolo/uwsgi-nginx-flask:python3.6
 
 # Set up environment variables
 ENV SIERRA_ENV=PROD
+ENV TZ=Europe/London
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Create directory where source is pulled
 RUN mkdir -p /source
