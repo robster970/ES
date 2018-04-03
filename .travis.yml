@@ -31,8 +31,7 @@ before_script:
 
 script:
   - pytest --cov-config .coveragerc --cov-report xml --cov=. test_sierra.py --verbose
-  - cd .output/
-  - ls -lart
+  - mkdir .output && cd .output/ && ls -lart && cd ..
   - sonar-scanner
   #- snyk test
 
