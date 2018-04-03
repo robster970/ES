@@ -28,7 +28,7 @@ install:
 
 before_script:
   - npm install -g snyk
-  - mkdir .output && cd .output/ && ls -lart && cd ..
+  - mkdir .output
 
 script:
   - pytest --cov-config .coveragerc --cov-report xml --cov=. test_sierra.py --verbose
