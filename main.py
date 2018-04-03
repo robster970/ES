@@ -42,7 +42,7 @@ def message_notification():
 # Set webapp name to app so it can be used by NGINX docker image
 # Important that filename is set to main.py also
 def create_app():
-    # init the object
+    # init the flask object
     sierra_app = Flask(__name__)
 
     # Create a message scheduler to run in the background and start it
@@ -96,7 +96,7 @@ def create_app():
     return sierra_app
 
 
-# Start up the webapp
+# Start up the flask app
 if __name__ == "__main__":
     app = create_app()
     app.run(host=default_host, debug=default_debug, port=default_port)
