@@ -233,6 +233,18 @@ def test_trade_processor_get_stop_positive_6():
     assert isinstance(g.get_stop_loss(), (int, float))
 
 
+def test_trade_processor_get_mikes_mood():
+    f = combined_test_object()
+    g = Trading(f)
+    g.es_vix_long("entry")
+    mikes_mood = g.get_mikes_mood()
+    print(mikes_mood)
+    happy = 'Happy'
+    grumpy = 'Grumpy'
+    assert isinstance(mikes_mood, str)
+    assert re.search(happy, mikes_mood) or re.search(grumpy, mikes_mood)
+
+
 ##############################
 # sierra_backtest tests      #
 ##############################

@@ -1,5 +1,6 @@
 import pandas as pd
 import logging
+import random
 
 
 class Trading:
@@ -75,6 +76,15 @@ class Trading:
 
     def get_stop_loss(self):
         return self.stop
+
+    @staticmethod
+    def get_mikes_mood():
+        random_number = random.randint(0, 1)
+        if random_number < 0.5:
+            mikes_mood = "Grumpy"
+        else:
+            mikes_mood = "Happy"
+        return mikes_mood
 
 
 # Define class for exception handling of incorrect data frame attributes

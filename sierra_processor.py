@@ -117,6 +117,7 @@ def main_processor(source, write_files):
     # Retrieve evaluated data for making trades using get_evaluated_data method.
     es_evaluated_data = es_decision.get_evaluated_data()
     es_stop_loss = es_decision.get_stop_loss()
+    es_mikes_mood = es_decision.get_mikes_mood()
 
     # print(es_evaluated_data)
 
@@ -177,7 +178,7 @@ def main_processor(source, write_files):
 
     return {'RunDate': now, 'LastEvaluated': last_evaluated_date, 'EntryDecision': es_entry_decision,
             'ExitDecision': es_exit_decision, 'StopLoss': es_stop_loss, 'EvaluatedData': es_evaluated_data,
-            'BacktestResult': es_backtest_results}
+            'BacktestResult': es_backtest_results, 'MikesMood': es_mikes_mood}
 
 
 plt.show(block=False)

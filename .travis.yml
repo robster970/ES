@@ -33,7 +33,7 @@ before_script:
 script:
   - pytest --cov-config .coveragerc --cov-report xml --cov=. test_sierra.py --verbose
   - sonar-scanner
-  #- snyk test
+  - snyk test
 
 cache:
   directories:
@@ -41,7 +41,7 @@ cache:
 
 after_success:
   - coveralls
-  #- snyk monitor
+  - snyk monitor
   - radon cc sierra*.py -as
   - rm coverage.xml
   - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
