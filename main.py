@@ -92,12 +92,11 @@ def create_app():
         backtest_results_response = response['BacktestResult']
         evaluated_data_response = evaluated_data_response.to_html(classes='EvaluatedData')
         backtest_results_response = backtest_results_response.to_html(classes='BacktestResult')
-        mikes_mood_response = response['MikesMood']
 
         # Pass the variables pack into index.html for rendering
         return render_template('index.html', source=which, run=run_response, last=last_response, entry=entry_response,
                                exit=exit_response, stoploss=stop_loss_response, evaluated=evaluated_data_response,
-                               backtest=backtest_results_response, mikesmood=mikes_mood_response)
+                               backtest=backtest_results_response)
 
     # @sierra_app.route("/scheduler")
     # def scheduler():
