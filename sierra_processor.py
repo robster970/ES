@@ -64,7 +64,7 @@ def main_processor(source, write_files):
     elif source == "S":
         # Import ES data from a Sierra Charts txt file
         es = si.Importer()
-        es_clean = es.get_data_sierra(".sierra_data/", "ESM18.dly_BarData.txt", "ES")
+        es_clean = es.get_data_sierra(".sierra_data/", "ESU18.dly_BarData.txt", "ES")
         log_message = "ES clean data set ready for use."
         logger.info(log_message)
 
