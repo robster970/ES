@@ -33,7 +33,7 @@ before_script:
 script:
   - pytest --cov-config .coveragerc --cov-report xml --cov=. test_sierra.py --verbose
   - sonar-scanner
-  - snyk test
+  #- snyk test
 
 cache:
   directories:
