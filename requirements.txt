@@ -44,7 +44,7 @@ pytest-cov==2.6.0
 pytest-flask==0.12.0
 python-dateutil==2.7.3
 pytz==2018.5
-PyYAML==4.2b4
+PyYAML==5.4
 Quandl==3.4.2
 radon==2.2.0
 redis==2.10.6
