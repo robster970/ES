@@ -56,7 +56,7 @@ s3transfer==0.1.13
 scipy==1.1.0
 six==1.11.0
 tzlocal==2.0.0b1
-urllib3==1.23
+urllib3==1.26.5
 weather-api==1.0.4
 Werkzeug==0.14.1
 wrapt==1.10.11
